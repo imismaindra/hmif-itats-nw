@@ -40,12 +40,12 @@ export function HeroBento() {
         {/* Right: Bento cards */}
         <div className="grid grid-cols-2 gap-4">
           {/* Stats Card */}
-          <div className="col-span-2 md:col-span-2 rounded-lg border border-border p-4">
+          <div className="col-span-2 md:col-span-2 rounded-lg border-3 border-border p-4">
             <h3 className="text-sm text-foreground/70 mb-3">Sekilas Angka</h3>
             <div className="grid grid-cols-3 gap-3">
               <Stat value="12+" label="Program" />
-              <Stat value="7" label="Divisi" />
-              <Stat value="300+" label="Anggota" />
+              <Stat value="3" label="Divisi" />
+              <Stat value="30+" label="Anggota" />
             </div>
           </div>
 

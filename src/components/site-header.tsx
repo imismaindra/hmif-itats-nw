@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
+import { Menu, X } from "lucide-react"
 
 const navItems = [
   { label: "Beranda", href: "/" },
@@ -58,19 +59,22 @@ export function SiteHeader() {
           </nav>
 
           {/* CTA + Mobile toggle */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 b-primary">
             <Button asChild className="hidden sm:inline-flex">
               <Link href="/#kontak">Kontak HMIF</Link>
             </Button>
             <button
               type="button"
-              className="md:hidden inline-flex items-center justify-center rounded-md px-3 py-2 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="bg-primary md:hidden inline-flex items-center justify-center rounded-md px-3 py-2 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Buka menu"
               aria-expanded={open}
-              onClick={() => setOpen((v) => !v)}
-            >
+              onClick={() => setOpen((v) => !v)}>
+              {open ? (
+                <X className="h-5 w-5 text-background" aria-hidden />
+              ) : (
+                <Menu className="h-5 w-5 text-background" aria-hidden />
+              )}
               <span className="sr-only">Buka menu</span>
-              <span className="i-lucide-menu h-5 w-5" aria-hidden />
             </button>
           </div>
         </div>

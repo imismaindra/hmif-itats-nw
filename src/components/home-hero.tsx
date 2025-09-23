@@ -29,15 +29,15 @@ export function HomeHero() {
 
           {/* Stats ringkas */}
           <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-4">
-            <div className="rounded-lg border p-3 sm:p-4">
+            <div className="rounded-lg border-3 p-3 sm:p-4">
               <p className="text-xs text-muted-foreground">Anggota</p>
               <p className="mt-1 text-lg sm:text-xl font-semibold">600+</p>
             </div>
-            <div className="rounded-lg border p-3 sm:p-4">
+            <div className="rounded-lg border-3 p-3 sm:p-4">
               <p className="text-xs text-muted-foreground">Program Kerja</p>
               <p className="mt-1 text-lg sm:text-xl font-semibold">25</p>
             </div>
-            <div className="rounded-lg border p-3 sm:p-4">
+            <div className="rounded-lg border-3 p-3 sm:p-4">
               <p className="text-xs text-muted-foreground">Kegiatan/Tahun</p>
               <p className="mt-1 text-lg sm:text-xl font-semibold">40+</p>
             </div>

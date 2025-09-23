@@ -175,6 +175,17 @@
     @apply bg-background text-foreground;
   }
 }
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
 .timeline-line {
   background: linear-gradient(180deg,
       transparent 0%,
@@ -197,4 +208,7 @@
 
 .status-upcoming {
   background: linear-gradient(135deg, oklch(0.6 0.2 220) 0%, oklch(0.5 0.15 220) 100%);
+}
+.float-effect {
+  animation: float 6s ease-in-out infinite;
 }

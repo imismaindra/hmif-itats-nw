@@ -289,7 +289,7 @@ export default function ProgramKerjaTimeline() {
                 <div key={program.id} className="relative flex items-start gap-8">
                   {/* Timeline Dot */}
                   <div
-                    className={`relative z-10 flex items-center justify-center w-16 h-16 rounded-full ${config.color} glow-effect`}
+                    className={`relative flex items-center justify-center w-16 h-16 rounded-full ${config.color} glow-effect`}
                   >
                     <StatusIcon className="w-8 h-8 text-white" />
                   </div>

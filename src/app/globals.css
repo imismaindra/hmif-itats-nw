@@ -41,6 +41,9 @@
   --border: #E5E7EB;
   --input: #E5E7EB;
   --ring: #EB329A;
+  --success: oklch(0.6 0.2 140);
+  --warning: oklch(0.7 0.2 60);
+  --info: oklch(0.6 0.2 220);
 
   /* Warna chart (opsional visualisasi) */
   --chart-1: #EB329A;
@@ -171,4 +174,27 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+.timeline-line {
+  background: linear-gradient(180deg,
+      transparent 0%,
+      oklch(0.7 0.15 280) 20%,
+      oklch(0.7 0.15 280) 80%,
+      transparent 100%);
+}
+
+.glow-effect {
+  box-shadow: 0 0 20px oklch(0.7 0.15 280 / 0.3);
+}
+
+.status-completed {
+  background: linear-gradient(135deg, oklch(0.6 0.2 140) 0%, oklch(0.5 0.15 140) 100%);
+}
+
+.status-ongoing {
+  background: linear-gradient(135deg, oklch(0.6 0.2 45) 0%, oklch(0.5 0.15 45) 100%);
+}
+
+.status-upcoming {
+  background: linear-gradient(135deg, oklch(0.6 0.2 220) 0%, oklch(0.5 0.15 220) 100%);
 }

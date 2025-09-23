@@ -31,7 +31,7 @@ export function SiteHeader() {
                 alt="Logo HMIF"
                 width={48}
                 height={48}
-                className="h-12 w-17 rounded-md border"
+                className="h-12 w-18"
                 priority
               />
               <div className="leading-tight">

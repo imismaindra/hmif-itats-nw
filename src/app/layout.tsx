@@ -21,7 +21,13 @@ export const metadata: Metadata = {
   title: "HMIF — Himpunan Mahasiswa Informatika",
   description:
     "Website resmi Himpunan Mahasiswa Informatika. Informasi struktur organisasi, divisi, program kerja, kegiatan, dan pengumuman/berita.",
+  icons: {
+    icon: "/favicon.ico", // default favicon
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon-16x16.png",
+  },
 }
+
 
 export default function RootLayout({
   children,

@@ -20,11 +20,11 @@ export function HeroKegiatan() {
 
           <p className="text-lg sm:text-xl text-muted-foreground text-balance max-w-2xl mx-auto mb-8 leading-relaxed">
             Dokumentasi lengkap program kerja dan kegiatan yang telah berhasil dilaksanakan oleh Himpunan Mahasiswa
-            Teknologi Informasi
+            Teknik Informatika ITATS
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <div className="text-sm text-muted-foreground">PERIODE 2024 • FAKULTAS TEKNIK • UNIVERSITAS INDONESIA</div>
+            <div className="text-sm text-muted-foreground">PERIODE 2024 • TEKNIK INFORMATIKA • ITATS</div>
           </div>
         </div>
       </div>

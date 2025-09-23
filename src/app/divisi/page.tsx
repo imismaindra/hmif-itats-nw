@@ -366,10 +366,10 @@ export default function DivisionsPage() {
       <div className="border-t border-border/50 bg-muted/30">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center space-y-2">
-            <p className="text-sm text-muted-foreground">{"Himpunan Mahasiswa - Universitas Teknologi Indonesia"}</p>
+            <p className="text-sm text-muted-foreground">{"Himpunan Mahasiswa Teknik Informatika - ITATS"}</p>
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
               <MapPin className="w-3 h-3" />
-              <span>{"Jl. Pendidikan No. 123, Jakarta Selatan"}</span>
+              <span>{"Jl. Arief Rahman Hakim No.100, Klampis Ngasem, Kec. Sukolilo, Surabaya, Jawa Timur 60117"}</span>
             </div>
           </div>
         </div>

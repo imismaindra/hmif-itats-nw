@@ -61,7 +61,7 @@ export function SiteHeader() {
           {/* CTA + Mobile toggle */}
           <div className="flex items-center gap-2 b-primary">
             <Button asChild className="hidden sm:inline-flex">
-              <Link href="/#kontak">Kontak HMIF</Link>
+              <Link href="https://www.instagram.com/hmif_itats/" target="_blank">Kontak HMIF</Link>
             </Button>
             <button
               type="button"
@@ -97,7 +97,7 @@ export function SiteHeader() {
             ))}
             <li className="mt-2">
               <Button asChild className="w-full">
-                <Link href="/#kontak" onClick={() => setOpen(false)}>
+                <Link href="https://www.instagram.com/hmif_itats/" target="_blank" onClick={() => setOpen(false)}>
                   Hubungi Kami
                 </Link>
               </Button>

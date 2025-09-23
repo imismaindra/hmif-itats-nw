@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3 className="text-sm font-semibold mb-3">Tentang HMIF</h3>
+            <h3 className="text-sm font-semibold mb-3">Tentang HMIF ITATS</h3>
             <p className="text-sm text-muted-foreground">
               Wadah kolaborasi dan pengembangan mahasiswa Informatika. Berkarya, berdampak, dan bertumbuh bersama.
             </p>
@@ -45,13 +45,13 @@ export function SiteFooter() {
             <h3 className="text-sm font-semibold mb-3">Kontak</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>Email: hmif@example.ac.id</li>
-              <li>Alamat: Kampus Informatika, Indonesia</li>
+              <li>Alamat: Jl. Arief Rahman Hakim No.100, Klampis Ngasem, Kec. Sukolilo, Surabaya, Jawa Timur 60117</li>
             </ul>
           </div>
           <div>
             <h3 className="text-sm font-semibold mb-3">Ikuti Kami</h3>
             <div className="flex items-center gap-3">
-              <Link href="#" aria-label="Instagram HMIF" className="hover:underline text-sm">
+              <Link href="https://www.instagram.com/hmif_itats/" target="_blank" aria-label="Instagram HMIF" className="hover:underline text-sm">
                 Instagram
               </Link>
               <Link href="#" aria-label="LinkedIn HMIF" className="hover:underline text-sm">

@@ -17,6 +17,7 @@ import {
   Camera,
   X,
 } from "lucide-react"
+import Image from "next/image"
 
 type ProgramStatus = "completed" | "ongoing" | "upcoming"
 
@@ -48,151 +49,260 @@ interface ProgramKerja {
 const programKerjaData: ProgramKerja[] = [
   {
     id: "1",
-    title: "Orientasi Mahasiswa Baru",
-    description: "Program pengenalan kampus dan organisasi untuk mahasiswa baru angkatan 2024",
-    startDate: "2024-08-15",
-    endDate: "2024-08-20",
-    status: "completed",
-    progress: 100,
-    department: "Kemahasiswaan",
-    participants: 450,
-    budget: "Rp 25.000.000",
-    leader: "Ahmad Rizki Pratama",
-    leaderAvatar: "/male-student-leader.png",
+    title: "Promosi Himpunan Mahasiswa Teknik Informatika 2025",
+    description: "Promosi dan pemberian wawasan tentang HMIF ITATS kepada mahasiswa baru Teknik Informatika ITATS.",
+    startDate: "2025-10-01",
+    endDate: "2025-10-01",
+    status: "ongoing",
+    progress: 70,
+    department: "Humas",
+    participants: 99,
+    budget: "Rp -",
+    leader: "R. Abiyyu Ardi Lian Permadi",
+    leaderAvatar: "/anggota/abiyyu_kalcer.png",
     team: [
-      { name: "Sari Dewi", role: "Wakil Ketua", avatar: "/diverse-female-student.png" },
-      { name: "Budi Santoso", role: "Sekretaris", avatar: "/male-student-studying.png" },
-      { name: "Maya Sari", role: "Bendahara", avatar: "/diverse-female-student.png" },
-      { name: "Doni Pratama", role: "Koordinator Acara", avatar: "/male-student-studying.png" },
+      { name: "Ahmad Maulana Ismaindra", role: "Dokumentasi", avatar: "/anggota/jawir.png" },
+      { name: "Tarishah Aridhah Zhafirah", role: "Publikasi", avatar: "/anggota/tata_akmj.png" },
     ],
-    location: "Auditorium Utama & Lapangan Kampus",
-    photos: [
-      "/university-orientation-ceremony.jpg",
-      "/students-group-activities.jpg",
-      "/campus-tour-students.jpg",
-      "/welcome-banner-university.jpg",
-    ],
+    location: "Graha ITATS",
+    photos: ["/poster_pomosi.png"],
     detailedDescription:
-      "Program Orientasi Mahasiswa Baru (OSMB) merupakan kegiatan wajib bagi seluruh mahasiswa baru angkatan 2024. Program ini bertujuan untuk memperkenalkan kehidupan kampus, nilai-nilai universitas, serta membangun networking antar mahasiswa baru. Kegiatan meliputi pengenalan fakultas, organisasi kemahasiswaan, fasilitas kampus, dan berbagai workshop pengembangan diri.",
+      "Kegiatan ini bertujuan memperkenalkan HMIF ITATS kepada mahasiswa baru Teknik Informatika ITATS, meliputi pengenalan program kerja, struktur organisasi, dan manfaat bergabung di himpunan.",
   },
   {
     id: "2",
-    title: "Workshop Pengembangan Soft Skills",
-    description: "Pelatihan kepemimpinan, komunikasi, dan manajemen waktu untuk anggota himpunan",
-    startDate: "2024-09-10",
-    endDate: "2024-10-15",
-    status: "ongoing",
-    progress: 65,
-    department: "Pengembangan SDM",
-    participants: 120,
-    budget: "Rp 15.000.000",
-    leader: "Indira Putri Maharani",
+    title: "Open Recruitment",
+    description: "Penerimaan anggota baru HMIF ITATS.",
+    startDate: "2025-10-10",
+    endDate: "2025-10-25",
+    status: "upcoming",
+    progress: 0,
+    department: "Keanggotaan",
+    participants: 150,
+    budget: "Rp 100.000",
+    leader: "Ayu Lestari",
     leaderAvatar: "/female-student-leader.png",
     team: [
-      { name: "Fajar Nugroho", role: "Koordinator Materi", avatar: "/male-student-studying.png" },
-      { name: "Rina Wulandari", role: "Koordinator Peserta", avatar: "/diverse-female-student.png" },
-      { name: "Eko Prasetyo", role: "Dokumentasi", avatar: "/male-student-studying.png" },
+      { name: "Bagus Setiawan", role: "Sekretaris", avatar: "/male-student-studying.png" },
+      { name: "Nur Aini", role: "Koordinator Registrasi", avatar: "/diverse-female-student.png" },
     ],
-    location: "Ruang Seminar Lt. 3 & Lab Komputer",
-    photos: ["/workshop-presentation-students.jpg", "/group-discussion-meeting.jpg", "/leadership-training-session.jpg"],
+    location: "Ruang Seminar ITATS",
+    photos: ["/open-recruitment-session.jpg"],
     detailedDescription:
-      "Workshop ini dirancang untuk meningkatkan kemampuan soft skills mahasiswa melalui serangkaian pelatihan intensif. Materi meliputi public speaking, leadership, time management, dan team building. Setiap sesi dipandu oleh praktisi berpengalaman dan dilengkapi dengan studi kasus nyata.",
+      "Open recruitment dilaksanakan untuk merekrut anggota baru HMIF ITATS dengan seleksi administrasi, wawancara, dan orientasi pengenalan organisasi.",
   },
   {
     id: "3",
-    title: "Seminar Nasional Teknologi",
-    description: 'Seminar dengan tema "Inovasi Teknologi untuk Masa Depan Indonesia"',
-    startDate: "2024-10-25",
-    endDate: "2024-10-26",
-    status: "ongoing",
-    progress: 40,
-    department: "Akademik",
-    participants: 300,
-    budget: "Rp 50.000.000",
-    leader: "Muhammad Arief Hidayat",
+    title: "Pelatihan Manajemen dan Organisasi (PMO)",
+    description: "Pelatihan manajemen dan organisasi bagi anggota himpunan HMIF ITATS.",
+    startDate: "2025-11-05",
+    endDate: "2025-11-10",
+    status: "upcoming",
+    progress: 0,
+    department: "Pengembangan SDM",
+    participants: 100,
+    budget: "Rp 750.000",
+    leader: "Andi Wijaya",
     leaderAvatar: "/male-student-leader.png",
     team: [
-      { name: "Dewi Lestari", role: "Koordinator Acara", avatar: "/diverse-female-student.png" },
-      { name: "Reza Pratama", role: "Koordinator Sponsor", avatar: "/male-student-studying.png" },
-      { name: "Sinta Maharani", role: "Humas", avatar: "/diverse-female-student.png" },
-      { name: "Bayu Setiawan", role: "IT Support", avatar: "/male-student-studying.png" },
-      { name: "Lina Sari", role: "Konsumsi", avatar: "/diverse-female-student.png" },
+      { name: "Fitri Handayani", role: "Bendahara", avatar: "/diverse-female-student.png" },
+      { name: "Yusuf Ali", role: "Materi", avatar: "/male-student-studying.png" },
     ],
-    location: "Convention Hall Jakarta",
-    photos: ["/technology-seminar-stage.jpg", "/conference-preparation-setup.jpg"],
+    location: "Aula Kampus ITATS",
+    photos: ["/training-leadership.jpg"],
     detailedDescription:
-      "Seminar nasional yang menghadirkan pembicara dari berbagai kalangan industri teknologi, akademisi, dan startup. Tema utama fokus pada AI, IoT, blockchain, dan teknologi masa depan. Event ini diharapkan menjadi wadah networking dan knowledge sharing bagi mahasiswa dan profesional IT.",
+      "Kegiatan ini ditujukan untuk meningkatkan kemampuan manajerial dan organisasi anggota HMIF ITATS melalui workshop, simulasi, dan studi kasus.",
   },
   {
     id: "4",
-    title: "Bakti Sosial Masyarakat",
-    description: "Program pengabdian masyarakat di daerah terpencil dengan fokus pendidikan",
-    startDate: "2024-11-15",
-    endDate: "2024-11-20",
+    title: "Public Speaking Berkelanjutan",
+    description: "Pelatihan public speaking kepada seluruh anggota HMIF ITATS.",
+    startDate: "2025-11-15",
+    endDate: "2026-07-30",
     status: "upcoming",
     progress: 0,
-    department: "Sosial Masyarakat",
-    participants: 80,
-    budget: "Rp 20.000.000",
-    leader: "Putri Ayu Lestari",
+    department: "Pengembangan SDM",
+    participants: 120,
+    budget: "Rp 0",
+    leader: "Nadia Kusuma",
     leaderAvatar: "/female-student-leader.png",
     team: [
-      { name: "Agus Setiawan", role: "Koordinator Logistik", avatar: "/male-student-studying.png" },
-      { name: "Nia Ramadhani", role: "Koordinator Pendidikan", avatar: "/diverse-female-student.png" },
-      { name: "Dimas Pratama", role: "Koordinator Kesehatan", avatar: "/male-student-studying.png" },
+      { name: "Agus Setiawan", role: "Koordinator Materi", avatar: "/male-student-studying.png" },
     ],
-    location: "Desa Sukamaju, Bogor",
-    photos: [],
+    location: "Lab Komputer & Aula Kampus",
+    photos: ["/public-speaking-training.jpg"],
     detailedDescription:
-      "Program pengabdian masyarakat yang bertujuan memberikan bantuan pendidikan dan kesehatan kepada masyarakat desa terpencil. Kegiatan meliputi mengajar anak-anak, penyuluhan kesehatan, dan pemberian bantuan alat tulis serta obat-obatan dasar.",
+      "Program pelatihan public speaking ini dilaksanakan secara berkelanjutan untuk melatih keberanian, komunikasi efektif, dan presentasi mahasiswa.",
   },
   {
     id: "5",
-    title: "Kompetisi Programming",
-    description: "Lomba pemrograman tingkat nasional untuk mahasiswa se-Indonesia",
-    startDate: "2024-12-05",
-    endDate: "2024-12-07",
+    title: "Seminar Penjurusan Teknik Informatika",
+    description: "Pemberian wawasan tentang penjurusan di Teknik Informatika ITATS.",
+    startDate: "2025-11-20",
+    endDate: "2025-11-20",
     status: "upcoming",
     progress: 0,
     department: "Akademik",
-    participants: 200,
-    budget: "Rp 35.000.000",
-    leader: "Kevin Wijaya",
+    participants: 180,
+    budget: "Rp 72.000",
+    leader: "Bayu Pratama",
     leaderAvatar: "/male-student-leader.png",
     team: [
-      { name: "Sarah Putri", role: "Koordinator Teknis", avatar: "/diverse-female-student.png" },
-      { name: "Andi Pratama", role: "Juri Kompetisi", avatar: "/male-student-studying.png" },
-      { name: "Lisa Maharani", role: "Koordinator Peserta", avatar: "/diverse-female-student.png" },
+      { name: "Dewi Sartika", role: "Moderator", avatar: "/diverse-female-student.png" },
     ],
-    location: "Lab Komputer Terpadu",
-    photos: [],
+    location: "Auditorium Kampus",
+    photos: ["/seminar-department.jpg"],
     detailedDescription:
-      "Kompetisi programming yang menguji kemampuan algoritma dan pemecahan masalah mahasiswa. Lomba terdiri dari beberapa kategori: competitive programming, web development, dan mobile app development. Hadiah total mencapai puluhan juta rupiah.",
+      "Seminar ini membahas pilihan penjurusan di Teknik Informatika ITATS, memberikan pemahaman tentang peluang karir dan bidang keahlian masing-masing.",
   },
   {
     id: "6",
-    title: "Pelatihan Kewirausahaan",
-    description: "Program pengembangan jiwa entrepreneur untuk mahasiswa",
-    startDate: "2025-01-20",
-    endDate: "2025-02-10",
+    title: "Penjualan Atribut PDH Himpunan dan Prodi",
+    description: "Penjualan atribut himpunan dan prodi bagi seluruh mahasiswa Informatika ITATS.",
+    startDate: "2025-11-25",
+    endDate: "2025-12-15",
     status: "upcoming",
     progress: 0,
     department: "Kewirausahaan",
-    participants: 150,
-    budget: "Rp 30.000.000",
-    leader: "Diana Sari Dewi",
+    participants: 250,
+    budget: "Rp 5.000.000",
+    leader: "Dian Puspita",
     leaderAvatar: "/female-student-leader.png",
     team: [
-      { name: "Rizky Pratama", role: "Koordinator Mentor", avatar: "/male-student-studying.png" },
-      { name: "Mega Wulandari", role: "Koordinator Workshop", avatar: "/diverse-female-student.png" },
-      { name: "Yoga Setiawan", role: "Koordinator Pitching", avatar: "/male-student-studying.png" },
+      { name: "Joko Santoso", role: "Logistik", avatar: "/male-student-studying.png" },
     ],
-    location: "Ruang Inkubator Bisnis",
-    photos: [],
+    location: "Sekretariat HMIF ITATS",
+    photos: ["/merchandise-sales.jpg"],
     detailedDescription:
-      "Program pelatihan komprehensif untuk mengembangkan jiwa kewirausahaan mahasiswa. Meliputi workshop business model canvas, digital marketing, financial planning, dan pitching. Program diakhiri dengan kompetisi business plan dengan hadiah inkubasi bisnis.",
+      "Program ini menyediakan atribut resmi himpunan dan prodi (seperti PDH, kaos, dan pin) untuk mahasiswa Informatika ITATS.",
   },
-]
+  {
+    id: "7",
+    title: "Penyambutan Wisuda 73",
+    description: "Penyambutan wisudawan ke-73 Teknik Informatika oleh HMIF ITATS.",
+    startDate: "2025-11-30",
+    endDate: "2025-11-30",
+    status: "upcoming",
+    progress: 0,
+    department: "Acara",
+    participants: 300,
+    budget: "Rp 200.000",
+    leader: "Rahmat Hidayat",
+    leaderAvatar: "/male-student-leader.png",
+    team: [
+      { name: "Mega Lestari", role: "Koordinator Dekorasi", avatar: "/diverse-female-student.png" },
+    ],
+    location: "Gedung Serbaguna ITATS",
+    photos: ["/graduation-ceremony.jpg"],
+    detailedDescription:
+      "Kegiatan ini bertujuan memberikan apresiasi kepada wisudawan Teknik Informatika angkatan ke-73 dengan acara seremonial sederhana.",
+  },
+  {
+    id: "8",
+    title: "Informatics Programming Competition",
+    description: "Kompetisi pemrograman terstruktur, basis data, dan pemrograman web untuk mahasiswa Teknik Informatika ITATS.",
+    startDate: "2026-01-10",
+    endDate: "2026-01-15",
+    status: "upcoming",
+    progress: 0,
+    department: "Kompetisi",
+    participants: 100,
+    budget: "Rp 600.000",
+    leader: "Hendra Gunawan",
+    leaderAvatar: "/male-student-leader.png",
+    team: [
+      { name: "Lisa Anggraini", role: "Panitia Teknis", avatar: "/diverse-female-student.png" },
+    ],
+    location: "Lab Komputer ITATS",
+    photos: ["/coding-competition.jpg"],
+    detailedDescription:
+      "Kompetisi ini bertujuan meningkatkan kemampuan mahasiswa dalam pemrograman dasar, basis data, dan web development.",
+  },
+  {
+    id: "9",
+    title: "Bakti Sosial Ramadhan 2026",
+    description: "Pelaksanaan bakti sosial ke panti asuhan dan memberikan santunan sosial.",
+    startDate: "2026-03-15",
+    endDate: "2026-03-25",
+    status: "upcoming",
+    progress: 0,
+    department: "Sosial",
+    participants: 80,
+    budget: "Rp 700.000",
+    leader: "Sofia Rahmawati",
+    leaderAvatar: "/female-student-leader.png",
+    team: [
+      { name: "Arif Nugroho", role: "Koordinator Lapangan", avatar: "/male-student-studying.png" },
+    ],
+    location: "Panti Asuhan Al-Hidayah",
+    photos: ["/social-service.jpg"],
+    detailedDescription:
+      "Bakti sosial ini berupa santunan kepada anak-anak panti asuhan, berbuka puasa bersama, serta pemberian sembako.",
+  },
+  {
+    id: "10",
+    title: "Penyambutan Wisuda 74",
+    description: "Penyambutan wisudawan ke-74 Teknik Informatika oleh HMIF ITATS.",
+    startDate: "2026-05-20",
+    endDate: "2026-05-20",
+    status: "upcoming",
+    progress: 0,
+    department: "Acara",
+    participants: 320,
+    budget: "Rp 200.000",
+    leader: "Adi Saputra",
+    leaderAvatar: "/male-student-leader.png",
+    team: [
+      { name: "Lina Marlina", role: "Koordinator Acara", avatar: "/diverse-female-student.png" },
+    ],
+    location: "Gedung Serbaguna ITATS",
+    photos: ["/graduation-event.jpg"],
+    detailedDescription:
+      "Acara penyambutan wisudawan angkatan ke-74 dilakukan dengan rangkaian hiburan, sambutan, dan persembahan dari HMIF ITATS.",
+  },
+  {
+    id: "11",
+    title: "Debat Calon Ketua HMIF dan Pemilu Raya 2026/2027",
+    description: "Debat calon ketua HMIF 2026/2027 dan pelaksanaan pemilu raya.",
+    startDate: "2026-07-05",
+    endDate: "2026-07-15",
+    status: "upcoming",
+    progress: 0,
+    department: "Keorganisasian",
+    participants: 200,
+    budget: "Rp 100.000",
+    leader: "Farhan Maulana",
+    leaderAvatar: "/male-student-leader.png",
+    team: [
+      { name: "Nisa Putri", role: "Moderator Debat", avatar: "/diverse-female-student.png" },
+    ],
+    location: "Aula Utama ITATS",
+    photos: ["/student-debate.jpg"],
+    detailedDescription:
+      "Debat ini bertujuan menilai visi misi calon ketua HMIF sebelum pemilihan umum mahasiswa untuk periode 2026/2027.",
+  },
+  {
+    id: "12",
+    title: "Musyawarah Himpunan Periode 2026/2027",
+    description: "Pelaksanaan revisi AD ART dan GBHO HMIF ITATS.",
+    startDate: "2026-08-10",
+    endDate: "2026-08-15",
+    status: "upcoming",
+    progress: 0,
+    department: "Keorganisasian",
+    participants: 100,
+    budget: "Rp 800.000",
+    leader: "Yuliana Sari",
+    leaderAvatar: "/female-student-leader.png",
+    team: [
+      { name: "Reza Mahendra", role: "Notulen", avatar: "/male-student-studying.png" },
+    ],
+    location: "Ruang Sidang ITATS",
+    photos: ["/student-meeting.jpg"],
+    detailedDescription:
+      "Musyawarah ini dilakukan untuk melakukan revisi AD ART dan GBHO HMIF ITATS sebagai pedoman organisasi periode 2026/2027.",
+  },
+];
 
 const statusConfig = {
   completed: {
@@ -241,7 +351,7 @@ export default function ProgramKerjaTimeline() {
             <div>
               <h1 className="text-4xl font-bold text-balance mb-2">Program Kerja</h1>
               <p className="text-muted-foreground text-lg">Himpunan Mahasiswa Teknik Informatika</p>
-              <p className="text-sm text-muted-foreground mt-1">Periode 2024/2025</p>
+              <p className="text-sm text-muted-foreground mt-1">Periode 2025/2026</p>
             </div>
             <div className="text-right">
               <div className="text-sm text-muted-foreground mb-1">Total Program</div>
@@ -445,7 +555,9 @@ export default function ProgramKerjaTimeline() {
               <div>
                 <h3 className="text-lg font-semibold mb-3">Ketua Program</h3>
                 <div className="flex items-center gap-3 p-4 bg-secondary/30 rounded-lg">
-                  <img
+                  <Image
+                    width={400}
+                    height={400}
                     src={selectedProgram.leaderAvatar || "/placeholder.svg"}
                     alt={selectedProgram.leader}
                     className="w-12 h-12 rounded-full object-cover"
@@ -463,7 +575,9 @@ export default function ProgramKerjaTimeline() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {selectedProgram.team.map((member, index) => (
                     <div key={index} className="flex items-center gap-3 p-3 bg-secondary/20 rounded-lg">
-                      <img
+                      <Image
+                        width={400}
+                        height={400}
                         src={member.avatar || "/placeholder.svg"}
                         alt={member.name}
                         className="w-10 h-10 rounded-full object-cover"
@@ -528,7 +642,9 @@ export default function ProgramKerjaTimeline() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {selectedProgram.photos.map((photo, index) => (
                       <div key={index} className="relative group">
-                        <img
+                        <Image
+                          width={400}
+                          height={300}
                           src={photo || "/placeholder.svg"}
                           alt={`Dokumentasi ${selectedProgram.title} ${index + 1}`}
                           className="w-full h-48 object-cover rounded-lg"

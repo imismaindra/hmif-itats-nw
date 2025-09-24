@@ -176,32 +176,6 @@ const divisionsData: Division[] = [
       },
     ],
   },
-//   {
-//     id: "acara",
-//     name: "Divisi Acara & Event",
-//     description: "Merencanakan dan menyelenggarakan berbagai kegiatan organisasi",
-//     color: "from-orange-500 to-red-500",
-//     members: [
-//       {
-//         id: "9",
-//         name: "Andi Wijaya",
-//         role: "coordinator",
-//         email: "andi.wijaya@email.com",
-//         phone: "+62 820-1234-5678",
-//         department: "Manajemen Event",
-//         avatar: "/professional-male-student-organizer.jpg",
-//       },
-//       {
-//         id: "10",
-//         name: "Putri Maharani",
-//         role: "member",
-//         email: "putri.maharani@email.com",
-//         phone: "+62 821-2345-6789",
-//         department: "Event Planning",
-//         avatar: "/professional-female-student-planner.jpg",
-//       },
-//     ],
-//   },
 ]
 
 export default function DivisionsPage() {

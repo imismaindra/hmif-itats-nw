@@ -54,7 +54,7 @@ const mockPengumuman: Pengumuman[] = [
     category: "pengumuman",
     priority: "tinggi",
     tags: ["Pemilihan", "Ketua Himpunan", "Periode Baru"],
-    image: "/student-election-voting-democracy-leadership-unive.jpg",
+    image: "/berita/fake.jpg",
   },
   {
     id: "2",
@@ -89,7 +89,7 @@ const mockPengumuman: Pengumuman[] = [
     category: "berita",
     priority: "sedang",
     tags: ["Workshop", "AI", "Machine Learning", "Teknologi"],
-    image: "/artificial-intelligence-machine-learning-workshop-.jpg",
+    image: "/berita/dummy.png",
   },
   {
     id: "3",
@@ -124,7 +124,7 @@ const mockPengumuman: Pengumuman[] = [
     category: "pengumuman",
     priority: "tinggi",
     tags: ["Kompetisi", "Programming", "Hadiah", "Internal"],
-    image: "/programming-competition-coding-contest-trophy-winn.jpg",
+    image: "/berita/dummy.png",
   },
   {
     id: "4",
@@ -159,7 +159,7 @@ const mockPengumuman: Pengumuman[] = [
     category: "berita",
     priority: "sedang",
     tags: ["Kerjasama", "Industri", "Magang", "Karir"],
-    image: "/business-partnership-technology-company-collaborat.jpg",
+    image: "/berita/dummy.png",
   },
 ]
 

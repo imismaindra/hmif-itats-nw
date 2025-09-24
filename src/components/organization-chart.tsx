@@ -19,7 +19,7 @@ const organizationData: OrgMember[] = [
     position: "Ketua Umum",
     department: "Kepemimpinan",
     level: 1,
-    image: "/professional-student-leader.jpg",
+    image: "/anggota/abiyyu_kalcer.png",
   },
   {
     id: "2",

@@ -2,10 +2,10 @@ import { Card } from "@/components/ui/card"
 
 export function StatsSection() {
   const stats = [
-    { number: "15", label: "Program Kerja Selesai", description: "Berbagai kegiatan akademik dan non-akademik" },
-    { number: "850+", label: "Mahasiswa Terlibat", description: "Partisipasi aktif dari seluruh angkatan" },
-    { number: "25", label: "Mitra Kerjasama", description: "Kolaborasi dengan industri dan institusi" },
-    { number: "12", label: "Bulan Aktif", description: "Konsistensi kegiatan sepanjang tahun" },
+    { number: "5", label: "Program Kerja Selesai", description: "Berbagai kegiatan akademik dan non-akademik" },
+    { number: "150+", label: "Mahasiswa Terlibat", description: "Partisipasi aktif dari seluruh angkatan" },
+    { number: "3", label: "Mitra Kerjasama", description: "Kolaborasi dengan industri dan institusi" },
+    { number: "6", label: "Bulan Aktif", description: "Konsistensi kegiatan sepanjang tahun" },
   ]
 
   return (

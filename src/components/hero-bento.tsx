@@ -52,8 +52,8 @@ export function HeroBento() {
           {/* Event Card */}
           <div className="rounded-lg border border-border p-4">
             <h3 className="text-sm text-foreground/70">Kegiatan Terdekat</h3>
-            <p className="mt-1 font-medium">Tech Talk: AI & Data</p>
-            <p className="text-sm text-foreground/70">Sabtu, 12 Okt • 13:00</p>
+            <p className="mt-1 font-medium">Pengembangan Manajemen Organisasi</p>
+            <p className="text-sm text-foreground/70">Selasa, 13.00 - 16.30</p>
             <Link
               href="/kegiatan"
               className="mt-3 inline-flex items-center gap-2 text-sm text-accent hover:underline"
@@ -66,8 +66,8 @@ export function HeroBento() {
           {/* Announcement Card */}
           <div className="rounded-lg border border-border p-4">
             <h3 className="text-sm text-foreground/70">Pengumuman</h3>
-            <p className="mt-1 font-medium">Rekrutmen Panitia Acara</p>
-            <p className="text-sm text-foreground/70">Daftar hingga 20 Okt</p>
+            <p className="mt-1 font-medium">Rekrutmen Anggota Baru</p>
+            <p className="text-sm text-foreground/70">Daftar hingga 31 Desember</p>
             <Link
               href="/pengumuman"
               className="mt-3 inline-flex items-center gap-2 text-sm text-accent hover:underline"

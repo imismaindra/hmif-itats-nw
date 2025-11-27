@@ -19,7 +19,7 @@ const organizationData: OrgMember[] = [
     position: "Ketua Umum",
     department: "Kepemimpinan",
     level: 1,
-    image: "/anggota/abiyyu_kalcer.png",
+    image: "/anggota/abiyyu-kahim.png",
   },
   {
     id: "2",
@@ -56,14 +56,14 @@ const organizationData: OrgMember[] = [
   {
     id: "6",
     name: "Tarishah Aridhah Zhafirah",
-    position: "Koordinator Humas",
+    position: "Koordinator Media Digital dan Humas",
     department: "Hubungan Masyarakat",
     level: 3,
     image: "/student-affairs-coordinator.jpg",
   },
   {
     id: "7",
-    name: "Haza Satria Nagari",
+    name: "Amelya Sofia Anggraini",
     position: "Koordinator Litbang",
     department: "Penelitian dan Pengembangan",
     level: 3,

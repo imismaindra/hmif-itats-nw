@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 export function SiteFooter() {
@@ -6,6 +7,17 @@ export function SiteFooter() {
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
+            {/* Logo HMIF */}
+            <div className="mb-4">
+              <Image
+                src="/icon-hmif.jpg"
+                alt="Logo HMIF ITATS"
+                width={80}
+                height={80}
+                className="rounded-full"
+              />
+            </div>
+
             <h3 className="text-sm font-semibold mb-3">Tentang HMIF ITATS</h3>
             <p className="text-sm text-muted-foreground">
               Wadah kolaborasi dan pengembangan mahasiswa Informatika. Berkarya, berdampak, dan bertumbuh bersama.
@@ -44,7 +56,7 @@ export function SiteFooter() {
           <div id="kontak">
             <h3 className="text-sm font-semibold mb-3">Kontak</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Email: hmif@example.ac.id</li>
+              <li>Email: hmifitats1991@gmail.com</li>
               <li>Alamat: Jl. Arief Rahman Hakim No.100, Klampis Ngasem, Kec. Sukolilo, Surabaya, Jawa Timur 60117</li>
             </ul>
           </div>

@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react" // bukan /next
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Suspense } from "react"
+import { Providers } from "@/lib/providers"
 import "./globals.css"
 
 const GeistSans = Geist({
@@ -48,7 +49,9 @@ export default function RootLayout({
         <Suspense fallback={<div>Loading...</div>}>
           <SiteHeader />
           <main id="main-content" className="min-h-[60vh]">
-            {children}
+            <Providers>
+              {children}
+            </Providers>
           </main>
           <SiteFooter />
         </Suspense>

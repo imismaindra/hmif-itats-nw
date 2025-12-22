@@ -3,11 +3,12 @@ import { query } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const sql = 'SELECT * FROM activities WHERE id = ?';
-    const activities = await query(sql, [params.id]) as any[];
+    const activities = await query(sql, [id]) as any[];
 
     if (activities.length === 0) {
       return NextResponse.json({ error: 'Activity not found' }, { status: 404 });
@@ -22,9 +23,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { title, category, date, participants, description, status, image } = body;
 
@@ -36,7 +38,7 @@ export async function PUT(
     `;
 
     await query(sql, [
-      title, category, date, participants, description, status || 'Selesai', image, params.id
+      title, category, date, participants, description, status || 'Selesai', image, id
     ]);
 
     return NextResponse.json({ message: 'Activity updated successfully' });
@@ -48,11 +50,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const sql = 'DELETE FROM activities WHERE id = ?';
-    await query(sql, [params.id]);
+    await query(sql, [id]);
 
     return NextResponse.json({ message: 'Activity deleted successfully' });
   } catch (error) {

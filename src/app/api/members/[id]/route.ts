@@ -3,11 +3,12 @@ import { query } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const sql = 'SELECT * FROM members WHERE id = ?';
-    const members = await query(sql, [params.id]) as any[];
+    const members = await query(sql, [id]) as any[];
 
     if (members.length === 0) {
       return NextResponse.json({ error: 'Member not found' }, { status: 404 });
@@ -22,9 +23,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { name, position, department, image, email, level } = body;
 
@@ -35,7 +37,7 @@ export async function PUT(
     `;
 
     await query(sql, [
-      name, position, department, image, email, level || 3, params.id
+      name, position, department, image, email, level || 3, id
     ]);
 
     return NextResponse.json({ message: 'Member updated successfully' });
@@ -47,11 +49,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const sql = 'DELETE FROM members WHERE id = ?';
-    await query(sql, [params.id]);
+    await query(sql, [id]);
 
     return NextResponse.json({ message: 'Member deleted successfully' });
   } catch (error) {

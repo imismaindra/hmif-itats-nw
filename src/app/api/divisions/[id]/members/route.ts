@@ -3,15 +3,16 @@ import { query } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const sql = `
       SELECT * FROM division_members
       WHERE division_id = ?
       ORDER BY role DESC, name ASC
     `;
-    const members = await query(sql, [params.id]);
+    const members = await query(sql, [id]);
     return NextResponse.json(members);
   } catch (error) {
     console.error('Error fetching division members:', error);
@@ -21,9 +22,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { name, role = 'member', email = '', phone = '', avatar = '', department = '' } = body;
 
@@ -33,7 +35,7 @@ export async function POST(
     `;
 
     const result = await query(sql, [
-      params.id, name, role, email, phone, avatar, department
+      id, name, role, email, phone, avatar, department
     ]);
 
     return NextResponse.json({

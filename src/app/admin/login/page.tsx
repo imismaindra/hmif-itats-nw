@@ -36,7 +36,7 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        router.push('/office/dashboard');
+        router.push('/dashboard');
         router.refresh();
       } else {
         setError(data.error || 'Login failed');

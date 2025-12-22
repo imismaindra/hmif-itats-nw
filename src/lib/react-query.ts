@@ -195,6 +195,31 @@ export function useCreateActivity() {
   });
 }
 
+export function useUpdateActivity() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...activity }: Activity) =>
+      apiRequest(`/activities/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(activity),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['activities'] });
+      queryClient.invalidateQueries({ queryKey: ['activity'] });
+    },
+  });
+}
+
+export function useDeleteActivity() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => apiRequest(`/activities/${id}`, { method: 'DELETE' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['activities'] });
+    },
+  });
+}
+
 // Programs hooks
 export function usePrograms(status?: string, limit?: number) {
   return useQuery({
@@ -228,6 +253,31 @@ export function useCreateProgram() {
   });
 }
 
+export function useUpdateProgram() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...program }: Program) =>
+      apiRequest(`/programs/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(program),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      queryClient.invalidateQueries({ queryKey: ['program'] });
+    },
+  });
+}
+
+export function useDeleteProgram() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => apiRequest(`/programs/${id}`, { method: 'DELETE' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+    },
+  });
+}
+
 // Members hooks
 export function useMembers(level?: number, limit?: number) {
   return useQuery({
@@ -255,6 +305,31 @@ export function useCreateMember() {
         method: 'POST',
         body: JSON.stringify(member),
       }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+    },
+  });
+}
+
+export function useUpdateMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...member }: Member) =>
+      apiRequest(`/members/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(member),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['member'] });
+    },
+  });
+}
+
+export function useDeleteMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => apiRequest(`/members/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
     },

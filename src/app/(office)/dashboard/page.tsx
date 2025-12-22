@@ -1,12 +1,76 @@
 'use client';
 
-import { usePosts, useActivities, usePrograms, useMembers, useDivisions, Post, Activity as ActivityType } from '@/lib/react-query';
+import { usePosts, useActivities, usePrograms, useMembers, useDivisions, Post, Activity as ActivityType, Division, DivisionMember } from '@/lib/react-query';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Plus, FileText, Activity as ActivityIcon, Calendar, Users, Building } from 'lucide-react';
+import { Plus, FileText, Activity as ActivityIcon, Calendar, Users, Building, X, Settings } from 'lucide-react';
+import { AddPostDialog } from '@/components/add-post-dialog';
+import { AddActivityDialog } from '@/components/add-activity-dialog';
+import { AddProgramDialog } from '@/components/add-program-dialog';
+import { AddMemberDialog } from '@/components/add-member-dialog';
+import { ManagePostsDialog } from '@/components/manage-posts-dialog';
+import { ManageDivisionsDialog } from '@/components/manage-divisions-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { useState } from 'react';
+
+function ContentTypeSelector({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Plus className="w-5 h-5" />
+            Tambah Konten Baru
+          </DialogTitle>
+          <DialogDescription>
+            Pilih jenis konten yang ingin ditambahkan
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="grid grid-cols-2 gap-4 py-4">
+          <AddPostDialog>
+            <Button variant="outline" className="h-24 flex flex-col gap-2">
+              <FileText className="w-6 h-6" />
+              <span className="text-sm">Pengumuman</span>
+            </Button>
+          </AddPostDialog>
+
+          <AddActivityDialog>
+            <Button variant="outline" className="h-24 flex flex-col gap-2">
+              <ActivityIcon className="w-6 h-6" />
+              <span className="text-sm">Kegiatan</span>
+            </Button>
+          </AddActivityDialog>
+
+          <AddProgramDialog>
+            <Button variant="outline" className="h-24 flex flex-col gap-2">
+              <Calendar className="w-6 h-6" />
+              <span className="text-sm">Program Kerja</span>
+            </Button>
+          </AddProgramDialog>
+
+          <AddMemberDialog>
+            <Button variant="outline" className="h-24 flex flex-col gap-2">
+              <Users className="w-6 h-6" />
+              <span className="text-sm">Anggota</span>
+            </Button>
+          </AddMemberDialog>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export default function AdminDashboard() {
+  const [contentDialogOpen, setContentDialogOpen] = useState(false);
   const { data: posts, isLoading: postsLoading } = usePosts();
   const { data: activities, isLoading: activitiesLoading } = useActivities();
   const { data: programs, isLoading: programsLoading } = usePrograms();
@@ -45,6 +109,7 @@ export default function AdminDashboard() {
     {
       title: 'Divisi',
       value: divisions?.length || 0,
+      subtitle: `${divisions?.reduce((acc: number, div: Division) => acc + (div.members?.length || 0), 0) || 0} anggota`,
       icon: Building,
       color: 'text-red-600',
       bgColor: 'bg-red-100',
@@ -78,7 +143,7 @@ export default function AdminDashboard() {
             <p className="text-muted-foreground">Kelola konten website HMIF ITATS</p>
           </div>
           <div className="flex gap-3">
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => setContentDialogOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Tambah Konten
             </Button>
@@ -120,9 +185,20 @@ export default function AdminDashboard() {
           <Card className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Pengumuman Terbaru</h3>
-              <Button variant="outline" size="sm">
-                Lihat Semua
-              </Button>
+              <div className="flex gap-2">
+                <ManagePostsDialog>
+                  <Button variant="outline" size="sm">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Kelola
+                  </Button>
+                </ManagePostsDialog>
+                <AddPostDialog>
+                  <Button size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Tambah
+                  </Button>
+                </AddPostDialog>
+              </div>
             </div>
             <div className="space-y-4">
               {posts?.slice(0, 3).map((post: Post) => (
@@ -167,28 +243,81 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
+        {/* Organization Management */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">Struktur Organisasi</h3>
+            <ManageDivisionsDialog>
+              <Button variant="outline" size="sm">
+                <Settings className="w-4 h-4 mr-2" />
+                Kelola Divisi
+              </Button>
+            </ManageDivisionsDialog>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {divisions?.slice(0, 6).map((division: Division) => (
+              <div key={division.id} className="p-4 border rounded-lg">
+                <div className="flex items-center gap-3 mb-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: division.color }}
+                  />
+                  <span className="font-medium">{division.name}</span>
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">{division.description}</p>
+                <div className="flex items-center justify-between text-sm">
+                  <span>{division.members?.length || 0} anggota</span>
+                  <Badge variant="outline" className="text-xs">
+                    {division.members?.filter((m: DivisionMember) => m.role === 'coordinator').length || 0} koordinator
+                  </Badge>
+                </div>
+              </div>
+            ))}
+
+            {(!divisions || divisions.length === 0) && (
+              <div className="col-span-full text-center py-8 text-muted-foreground">
+                Belum ada divisi. Klik "Kelola Divisi" untuk menambah divisi pertama.
+              </div>
+            )}
+          </div>
+        </Card>
+
         {/* Quick Actions */}
         <Card className="p-6">
           <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="outline" className="h-20 flex flex-col gap-2">
-              <FileText className="w-5 h-5" />
-              <span className="text-sm">Tambah Pengumuman</span>
-            </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2">
-              <ActivityIcon className="w-5 h-5" />
-              <span className="text-sm">Tambah Kegiatan</span>
-            </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2">
-              <Calendar className="w-5 h-5" />
-              <span className="text-sm">Tambah Program</span>
-            </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2">
-              <Users className="w-5 h-5" />
-              <span className="text-sm">Tambah Anggota</span>
-            </Button>
+            <AddPostDialog>
+              <Button variant="outline" className="h-20 flex flex-col gap-2">
+                <FileText className="w-5 h-5" />
+                <span className="text-sm">Tambah Pengumuman</span>
+              </Button>
+            </AddPostDialog>
+
+            <AddActivityDialog>
+              <Button variant="outline" className="h-20 flex flex-col gap-2">
+                <ActivityIcon className="w-5 h-5" />
+                <span className="text-sm">Tambah Kegiatan</span>
+              </Button>
+            </AddActivityDialog>
+
+            <AddProgramDialog>
+              <Button variant="outline" className="h-20 flex flex-col gap-2">
+                <Calendar className="w-5 h-5" />
+                <span className="text-sm">Tambah Program</span>
+              </Button>
+            </AddProgramDialog>
+
+            <AddMemberDialog>
+              <Button variant="outline" className="h-20 flex flex-col gap-2">
+                <Users className="w-5 h-5" />
+                <span className="text-sm">Tambah Anggota</span>
+              </Button>
+            </AddMemberDialog>
           </div>
         </Card>
+
+        <ContentTypeSelector open={contentDialogOpen} onOpenChange={setContentDialogOpen} />
       </div>
     </div>
   );

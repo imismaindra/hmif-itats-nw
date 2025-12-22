@@ -3,10 +3,10 @@ import { query } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+  context: { params: Promise<{ id: string }> }
+): Promise<Response> {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const sql = 'SELECT * FROM activities WHERE id = ?';
     const activities = await query(sql, [id]) as any[];
 
@@ -23,10 +23,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+  context: { params: Promise<{ id: string }> }
+): Promise<Response> {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const body = await request.json();
     const { title, category, date, participants, description, status, image } = body;
 
@@ -50,10 +50,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+  context: { params: Promise<{ id: string }> }
+): Promise<Response> {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const sql = 'DELETE FROM activities WHERE id = ?';
     await query(sql, [id]);
 

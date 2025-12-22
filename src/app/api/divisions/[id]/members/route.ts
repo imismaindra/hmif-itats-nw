@@ -3,10 +3,10 @@ import { query } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+  context: { params: Promise<{ id: string }> }
+): Promise<Response> {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const sql = `
       SELECT * FROM division_members
       WHERE division_id = ?
@@ -22,10 +22,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+  context: { params: Promise<{ id: string }> }
+): Promise<Response> {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const body = await request.json();
     const { name, role = 'member', email = '', phone = '', avatar = '', department = '' } = body;
 

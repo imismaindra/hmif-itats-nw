@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     const token = generateToken(user);
 
-    // Create response with token in cookie
+    // Create response with token in cookie and body
     const response = NextResponse.json({
       message: 'Login successful',
       user: {
@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
         username: user.username,
         email: user.email,
         role: user.role
-      }
+      },
+      token: token // Include token in response for localStorage
     });
 
     // Set HTTP-only cookie

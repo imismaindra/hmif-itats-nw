@@ -36,6 +36,10 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
+        // Store token in localStorage for API calls
+        if (data.token) {
+          localStorage.setItem('auth-token', data.token);
+        }
         router.push('/dashboard');
         router.refresh();
       } else {

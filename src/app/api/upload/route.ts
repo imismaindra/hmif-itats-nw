@@ -5,8 +5,28 @@ import { getUserFromToken } from '@/lib/auth-middleware';
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication
-    const user = getUserFromToken(request);
+    // Check authentication - try cookie first, then Authorization header
+    let token = request.cookies.get('auth-token')?.value;
+
+    // If no cookie token, try Authorization header
+    if (!token) {
+      const authHeader = request.headers.get('authorization');
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
+
+    console.log('Upload token:', token ? 'present' : 'missing');
+
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Verify token
+    const { verifyToken } = await import('@/lib/auth');
+    const user = verifyToken(token);
+    console.log('Upload user:', user ? user.username : 'null');
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

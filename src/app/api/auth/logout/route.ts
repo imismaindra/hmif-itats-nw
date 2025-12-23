@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 
 export async function POST() {
-  const response = NextResponse.json({ message: 'Logout successful' });
+  const response = NextResponse.json({
+    message: 'Logout successful',
+    clearLocalStorage: true // Instruct frontend to clear localStorage
+  });
 
   // Clear the auth token cookie
   response.cookies.set('auth-token', '', {

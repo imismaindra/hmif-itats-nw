@@ -57,9 +57,13 @@ export function FileUpload({
       const formData = new FormData();
       formData.append('file', file);
 
+      const token = localStorage.getItem('auth-token');
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
+        headers: token ? {
+          'Authorization': `Bearer ${token}`,
+        } : {},
       });
 
       if (!response.ok) {

@@ -19,9 +19,33 @@ const GeistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "HMIF — Himpunan Mahasiswa Informatika",
+  title: "HMIF ITATS — Himpunan Mahasiswa Informatika",
   description:
-    "Website resmi Himpunan Mahasiswa Informatika. Informasi struktur organisasi, divisi, program kerja, kegiatan, dan pengumuman/berita.",
+    "Website resmi Himpunan Mahasiswa Informatika ITATS. Informasi struktur organisasi, divisi, program kerja, kegiatan, dan pengumuman/berita.",
+  keywords: ["HMIF", "ITATS", "Himpunan Mahasiswa Informatika", "Institut Teknologi Adhi Tama Surabaya"],
+  authors: [{ name: "HMIF ITATS" }],
+  openGraph: {
+    title: "HMIF ITATS — Himpunan Mahasiswa Informatika",
+    description: "Website resmi Himpunan Mahasiswa Informatika ITATS. Informasi struktur organisasi, divisi, program kerja, kegiatan, dan pengumuman/berita.",
+    url: "https://hmif.itats.ac.id",
+    siteName: "HMIF ITATS",
+    images: [
+      {
+        url: "/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "HMIF ITATS Logo",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HMIF ITATS — Himpunan Mahasiswa Informatika",
+    description: "Website resmi Himpunan Mahasiswa Informatika ITATS.",
+    images: ["/android-chrome-512x512.png"],
+  },
   icons: {
     icon: "/favicon.ico", // default favicon
     apple: "/apple-touch-icon.png",

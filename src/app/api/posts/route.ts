@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { getUserFromToken } from '@/lib/auth-middleware';
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,8 +21,30 @@ export async function GET(request: NextRequest) {
       params.push(parseInt(limit));
     }
 
-    const posts = await query(sql, params);
-    return NextResponse.json(posts);
+    const posts = await query(sql, params) as any[];
+
+    // Parse JSON fields
+    const processedPosts = posts.map(post => {
+      let tags = [];
+
+      try {
+        if (typeof post.tags === 'string') {
+          tags = JSON.parse(post.tags || '[]');
+        } else if (post.tags) {
+          tags = post.tags;
+        }
+      } catch (e) {
+        console.error('Error parsing tags JSON:', e);
+        tags = [];
+      }
+
+      return {
+        ...post,
+        tags
+      };
+    });
+
+    return NextResponse.json(processedPosts);
   } catch (error) {
     console.error('Error fetching posts:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -30,8 +53,29 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Get authenticated user
+    const user = getUserFromToken(request);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!user.member_id) {
+      return NextResponse.json({
+        error: 'User not associated with a member. Please log out and log back in to refresh your session.',
+        code: 'SESSION_EXPIRED'
+      }, { status: 400 });
+    }
+
+    // Get user's member information
+    const members = await query('SELECT name FROM members WHERE id = ?', [user.member_id]) as any[];
+    if (members.length === 0) {
+      return NextResponse.json({ error: 'Member not found' }, { status: 400 });
+    }
+
+    const memberName = members[0].name;
+
     const body = await request.json();
-    const { title, excerpt, content, date, author, category, priority, tags, image } = body;
+    const { title, excerpt, content, date, category, priority, tags, image } = body;
 
     const sql = `
       INSERT INTO posts (title, excerpt, content, date, author, category, priority, tags, image)
@@ -39,7 +83,7 @@ export async function POST(request: NextRequest) {
     `;
 
     const result = await query(sql, [
-      title, excerpt, content, date, author, category, priority || 'sedang',
+      title, excerpt, content, date, memberName, category, priority || 'sedang',
       JSON.stringify(tags || []), image
     ]);
 

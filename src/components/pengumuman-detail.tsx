@@ -4,21 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { ArrowLeft, Calendar, User, Tag, Share2, Bookmark } from "lucide-react"
-
-interface Pengumuman {
-  id: string
-  title: string
-  excerpt: string
-  content: string
-  date: string
-  author: string
-  category: "pengumuman" | "berita"
-  priority: "tinggi" | "sedang" | "rendah"
-  tags: string[]
-}
+import { Post } from "@/lib/react-query"
 
 interface PengumumanDetailProps {
-  pengumuman: Pengumuman
+  pengumuman: Post
   onBack: () => void
 }
 

@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Users } from 'lucide-react';
+import { FileUpload } from '@/components/ui/file-upload';
 
 interface AddMemberDialogProps {
   children: React.ReactNode;
@@ -141,27 +142,25 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                placeholder="email@example.com"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={(e) => handleChange('email', e.target.value)}
+              placeholder="email@example.com"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="image">URL Foto</Label>
-              <Input
-                id="image"
-                value={formData.image}
-                onChange={(e) => handleChange('image', e.target.value)}
-                placeholder="https://example.com/photo.jpg"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label>Foto Profil</Label>
+            <FileUpload
+              value={formData.image}
+              onChange={(url) => handleChange('image', url)}
+              placeholder="Pilih foto profil anggota"
+              maxSize={5}
+            />
           </div>
 
           <DialogFooter>

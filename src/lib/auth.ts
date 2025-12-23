@@ -11,6 +11,7 @@ export interface User {
   username: string;
   email: string;
   role: 'admin' | 'editor' | 'viewer';
+  member_id?: number;
   created_at: string;
   updated_at: string;
 }
@@ -35,7 +36,8 @@ export function generateToken(user: User): string {
       id: user.id,
       username: user.username,
       email: user.email,
-      role: user.role
+      role: user.role,
+      member_id: user.member_id
     },
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES_IN }
@@ -50,6 +52,7 @@ export function verifyToken(token: string): User | null {
       username: decoded.username,
       email: decoded.email,
       role: decoded.role,
+      member_id: decoded.member_id,
       created_at: '',
       updated_at: ''
     };
@@ -81,6 +84,7 @@ export async function authenticateUser(credentials: LoginCredentials): Promise<U
       username: user.username,
       email: user.email,
       role: user.role,
+      member_id: user.member_id,
       created_at: user.created_at,
       updated_at: user.updated_at
     };
@@ -104,6 +108,7 @@ export async function getUserById(id: number): Promise<User | null> {
       username: user.username,
       email: user.email,
       role: user.role,
+      member_id: user.member_id,
       created_at: user.created_at,
       updated_at: user.updated_at
     };

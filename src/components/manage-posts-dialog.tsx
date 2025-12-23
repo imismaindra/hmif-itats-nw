@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { usePosts, useDeletePost, Post } from '@/lib/react-query';
+import { usePosts, useDeletePost, useTogglePostActive, Post } from '@/lib/react-query';
 import { AddPostDialog } from '@/components/add-post-dialog';
+import { EditPostDialog } from '@/components/edit-post-dialog';
 import {
   Dialog,
   DialogContent,
@@ -24,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Loader2, Edit, Trash2, FileText, Plus } from 'lucide-react';
+import { Loader2, Edit, Trash2, FileText, Plus, Eye, EyeOff } from 'lucide-react';
 
 interface ManagePostsDialogProps {
   children: React.ReactNode;
@@ -33,9 +34,11 @@ interface ManagePostsDialogProps {
 export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
   const [open, setOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const { data: posts, isLoading, error } = usePosts();
   const deletePost = useDeletePost();
+  const toggleActive = useTogglePostActive();
 
   const handleDelete = async (id: number) => {
     if (confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')) {
@@ -49,9 +52,22 @@ export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
 
   const handleEdit = (post: Post) => {
     setEditingPost(post);
+    setEditDialogOpen(true);
+  };
+
+  const handleToggleActive = async (post: Post) => {
+    try {
+      await toggleActive.mutateAsync({
+        id: post.id,
+        is_active: !post.is_active,
+      });
+    } catch (error) {
+      console.error('Error toggling post status:', error);
+    }
   };
 
   const closeEditDialog = () => {
+    setEditDialogOpen(false);
     setEditingPost(null);
   };
 
@@ -120,10 +136,11 @@ export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
                 <TableRow>
                   <TableHead>Judul</TableHead>
                   <TableHead>Kategori</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Prioritas</TableHead>
                   <TableHead>Penulis</TableHead>
                   <TableHead>Tanggal</TableHead>
-                  <TableHead className="w-[100px]">Aksi</TableHead>
+                  <TableHead className="w-[150px]">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -141,6 +158,19 @@ export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
                     </TableCell>
                     <TableCell>
                       <Badge
+                        variant={post.is_active ? "default" : "secondary"}
+                        className="flex items-center gap-1 w-fit"
+                      >
+                        {post.is_active ? (
+                          <Eye className="w-3 h-3" />
+                        ) : (
+                          <EyeOff className="w-3 h-3" />
+                        )}
+                        {post.is_active ? 'Aktif' : 'Nonaktif'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
                         variant={
                           post.priority === 'tinggi' ? 'destructive' :
                           post.priority === 'sedang' ? 'default' : 'secondary'
@@ -153,21 +183,36 @@ export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
                     <TableCell>{post.author}</TableCell>
                     <TableCell>{new Date(post.date).toLocaleDateString('id-ID')}</TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
+                      <div className="flex gap-1">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleEdit(post)}
+                          title="Edit"
                         >
-                          <Edit className="w-4 h-4" />
+                          <Edit className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          variant={post.is_active ? "secondary" : "default"}
+                          size="sm"
+                          onClick={() => handleToggleActive(post)}
+                          disabled={toggleActive.isPending}
+                          title={post.is_active ? "Nonaktifkan" : "Aktifkan"}
+                        >
+                          {post.is_active ? (
+                            <EyeOff className="w-3 h-3" />
+                          ) : (
+                            <Eye className="w-3 h-3" />
+                          )}
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleDelete(post.id)}
                           disabled={deletePost.isPending}
+                          title="Hapus"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3 h-3" />
                         </Button>
                       </div>
                     </TableCell>
@@ -175,7 +220,7 @@ export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
                 ))}
                 {posts?.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                       Belum ada pengumuman
                     </TableCell>
                   </TableRow>
@@ -195,97 +240,13 @@ export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
       {editingPost && (
         <EditPostDialog
           post={editingPost}
-          open={!!editingPost}
-          onClose={closeEditDialog}
+          open={editDialogOpen}
+          onOpenChange={(open) => {
+            setEditDialogOpen(open);
+            if (!open) setEditingPost(null);
+          }}
         />
       )}
     </>
-  );
-}
-
-interface EditPostDialogProps {
-  post: Post;
-  open: boolean;
-  onClose: () => void;
-}
-
-function EditPostDialog({ post, open, onClose }: EditPostDialogProps) {
-  const [formData, setFormData] = useState({
-    title: post.title,
-    excerpt: post.excerpt,
-    content: post.content,
-    date: post.date,
-    author: post.author,
-    category: post.category,
-    priority: post.priority,
-    tags: post.tags.join(', '),
-    image: post.image || '',
-  });
-  const [error, setError] = useState('');
-
-  const updatePost = useDeletePost(); // We'll replace this with useUpdatePost
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    try {
-      // This should use updatePost mutation instead
-      // For now, just close the dialog
-      onClose();
-    } catch (error) {
-      setError('Gagal mengupdate pengumuman');
-    }
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Edit Pengumuman</DialogTitle>
-          <DialogDescription>
-            Edit detail pengumuman
-          </DialogDescription>
-        </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Judul</label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded"
-              value={formData.title}
-              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Konten</label>
-            <textarea
-              className="w-full p-2 border rounded min-h-[100px]"
-              value={formData.content}
-              onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-              required
-            />
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
-              Batal
-            </Button>
-            <Button type="submit">
-              Simpan Perubahan
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
   );
 }

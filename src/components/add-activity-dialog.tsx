@@ -17,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Activity as ActivityIcon } from 'lucide-react';
+import { FileUpload } from '@/components/ui/file-upload';
 
 interface AddActivityDialogProps {
   children: React.ReactNode;
@@ -156,12 +157,12 @@ export function AddActivityDialog({ children }: AddActivityDialogProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="image">URL Gambar</Label>
-            <Input
-              id="image"
+            <Label>Gambar</Label>
+            <FileUpload
               value={formData.image}
-              onChange={(e) => handleChange('image', e.target.value)}
-              placeholder="https://example.com/image.jpg"
+              onChange={(url) => handleChange('image', url)}
+              placeholder="Pilih gambar untuk kegiatan"
+              maxSize={5}
             />
           </div>
 

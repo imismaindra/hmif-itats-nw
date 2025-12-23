@@ -22,12 +22,39 @@ export async function GET(request: NextRequest) {
 
     const programs = await query(sql, params) as any[];
 
-    // Parse JSON fields
-    const processedPrograms = programs.map(program => ({
-      ...program,
-      team: JSON.parse(program.team || '[]'),
-      photos: JSON.parse(program.photos || '[]')
-    }));
+    // Parse JSON fields - handle both string and object types
+    const processedPrograms = programs.map(program => {
+      let team = [];
+      let photos = [];
+
+      try {
+        if (typeof program.team === 'string') {
+          team = JSON.parse(program.team || '[]');
+        } else if (program.team) {
+          team = program.team;
+        }
+      } catch (e) {
+        console.error('Error parsing team JSON:', e);
+        team = [];
+      }
+
+      try {
+        if (typeof program.photos === 'string') {
+          photos = JSON.parse(program.photos || '[]');
+        } else if (program.photos) {
+          photos = program.photos;
+        }
+      } catch (e) {
+        console.error('Error parsing photos JSON:', e);
+        photos = [];
+      }
+
+      return {
+        ...program,
+        team,
+        photos
+      };
+    });
 
     return NextResponse.json(processedPrograms);
   } catch (error) {

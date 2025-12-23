@@ -1,5 +1,3 @@
--- Database Schema for HMIF ITATS Admin System
-
 CREATE DATABASE IF NOT EXISTS hmif_itats;
 USE hmif_itats;
 
@@ -15,6 +13,7 @@ CREATE TABLE IF NOT EXISTS posts (
   priority ENUM('tinggi', 'sedang', 'rendah') DEFAULT 'sedang',
   tags JSON,
   image VARCHAR(255),
+  is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -98,9 +97,11 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   role ENUM('admin', 'editor', 'viewer') DEFAULT 'viewer',
+  member_id INT,
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE SET NULL
 );
 
 -- Media table (File uploads)

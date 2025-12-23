@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, FileText } from 'lucide-react';
+import { FileUpload } from '@/components/ui/file-upload';
 
 interface AddPostDialogProps {
   children: React.ReactNode;
@@ -36,7 +37,6 @@ export function AddPostDialog({ children }: AddPostDialogProps) {
     excerpt: '',
     content: '',
     date: new Date().toISOString().split('T')[0],
-    author: '',
     category: 'pengumuman' as 'pengumuman' | 'berita',
     priority: 'sedang' as 'tinggi' | 'sedang' | 'rendah',
     tags: '',
@@ -62,7 +62,6 @@ export function AddPostDialog({ children }: AddPostDialogProps) {
         excerpt: '',
         content: '',
         date: new Date().toISOString().split('T')[0],
-        author: '',
         category: 'pengumuman',
         priority: 'sedang',
         tags: '',
@@ -100,28 +99,15 @@ export function AddPostDialog({ children }: AddPostDialogProps) {
             </Alert>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Judul *</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => handleChange('title', e.target.value)}
-                placeholder="Masukkan judul pengumuman"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="author">Penulis *</Label>
-              <Input
-                id="author"
-                value={formData.author}
-                onChange={(e) => handleChange('author', e.target.value)}
-                placeholder="Nama penulis"
-                required
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="title">Judul *</Label>
+            <Input
+              id="title"
+              value={formData.title}
+              onChange={(e) => handleChange('title', e.target.value)}
+              placeholder="Masukkan judul pengumuman"
+              required
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -187,26 +173,24 @@ export function AddPostDialog({ children }: AddPostDialogProps) {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="tags">Tag (pisahkan dengan koma)</Label>
-              <Input
-                id="tags"
-                value={formData.tags}
-                onChange={(e) => handleChange('tags', e.target.value)}
-                placeholder="tag1, tag2, tag3"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="tags">Tag (pisahkan dengan koma)</Label>
+            <Input
+              id="tags"
+              value={formData.tags}
+              onChange={(e) => handleChange('tags', e.target.value)}
+              placeholder="tag1, tag2, tag3"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="image">URL Gambar</Label>
-              <Input
-                id="image"
-                value={formData.image}
-                onChange={(e) => handleChange('image', e.target.value)}
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label>Gambar</Label>
+            <FileUpload
+              value={formData.image}
+              onChange={(url) => handleChange('image', url)}
+              placeholder="Pilih gambar untuk pengumuman"
+              maxSize={5}
+            />
           </div>
 
           <DialogFooter>

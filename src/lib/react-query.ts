@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/components/ui/toast';
 
 // Types
 export interface Post {
@@ -12,6 +13,7 @@ export interface Post {
   priority: 'tinggi' | 'sedang' | 'rendah';
   tags: string[];
   image?: string;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -125,6 +127,7 @@ export function usePost(id: number) {
 
 export function useCreatePost() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (post: Omit<Post, 'id' | 'created_at' | 'updated_at'>) =>
       apiRequest('/posts', {
@@ -133,12 +136,33 @@ export function useCreatePost() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Pengumuman berhasil ditambahkan',
+      });
+    },
+    onError: (error: Error) => {
+      if (error.message?.includes('SESSION_EXPIRED')) {
+        addToast({
+          type: 'warning',
+          title: 'Sesi Perlu Diperbarui',
+          description: 'Silakan logout dan login kembali untuk menggunakan fitur terbaru',
+        });
+      } else {
+        addToast({
+          type: 'error',
+          title: 'Gagal',
+          description: error.message || 'Gagal menambahkan pengumuman',
+        });
+      }
     },
   });
 }
 
 export function useUpdatePost() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: ({ id, ...post }: Post) =>
       apiRequest(`/posts/${id}`, {
@@ -148,16 +172,69 @@ export function useUpdatePost() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
       queryClient.invalidateQueries({ queryKey: ['post'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Pengumuman berhasil diperbarui',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal memperbarui pengumuman',
+      });
     },
   });
 }
 
 export function useDeletePost() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (id: number) => apiRequest(`/posts/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Pengumuman berhasil dihapus',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menghapus pengumuman',
+      });
+    },
+  });
+}
+
+export function useTogglePostActive() {
+  const queryClient = useQueryClient();
+  const { addToast } = useToast();
+  return useMutation({
+    mutationFn: ({ id, is_active }: { id: number; is_active: boolean }) =>
+      apiRequest(`/posts/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ is_active }),
+      }),
+    onSuccess: (_: any, { is_active }: { id: number; is_active: boolean }) => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ['post'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: `Pengumuman berhasil ${is_active ? 'diaktifkan' : 'dinonaktifkan'}`,
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal mengubah status pengumuman',
+      });
     },
   });
 }
@@ -183,6 +260,7 @@ export function useActivity(id: number) {
 
 export function useCreateActivity() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (activity: Omit<Activity, 'id' | 'created_at' | 'updated_at'>) =>
       apiRequest('/activities', {
@@ -191,12 +269,25 @@ export function useCreateActivity() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activities'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Kegiatan berhasil ditambahkan',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menambahkan kegiatan',
+      });
     },
   });
 }
 
 export function useUpdateActivity() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: ({ id, ...activity }: Activity) =>
       apiRequest(`/activities/${id}`, {
@@ -206,16 +297,41 @@ export function useUpdateActivity() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activities'] });
       queryClient.invalidateQueries({ queryKey: ['activity'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Kegiatan berhasil diperbarui',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal memperbarui kegiatan',
+      });
     },
   });
 }
 
 export function useDeleteActivity() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (id: number) => apiRequest(`/activities/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activities'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Kegiatan berhasil dihapus',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menghapus kegiatan',
+      });
     },
   });
 }
@@ -241,6 +357,7 @@ export function useProgram(id: number) {
 
 export function useCreateProgram() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (program: Omit<Program, 'id' | 'created_at' | 'updated_at'>) =>
       apiRequest('/programs', {
@@ -249,12 +366,25 @@ export function useCreateProgram() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Program kerja berhasil ditambahkan',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menambahkan program kerja',
+      });
     },
   });
 }
 
 export function useUpdateProgram() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: ({ id, ...program }: Program) =>
       apiRequest(`/programs/${id}`, {
@@ -264,16 +394,41 @@ export function useUpdateProgram() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
       queryClient.invalidateQueries({ queryKey: ['program'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Program kerja berhasil diperbarui',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal memperbarui program kerja',
+      });
     },
   });
 }
 
 export function useDeleteProgram() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (id: number) => apiRequest(`/programs/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Program kerja berhasil dihapus',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menghapus program kerja',
+      });
     },
   });
 }
@@ -299,6 +454,7 @@ export function useMember(id: number) {
 
 export function useCreateMember() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (member: Omit<Member, 'id' | 'created_at' | 'updated_at'>) =>
       apiRequest('/members', {
@@ -307,12 +463,25 @@ export function useCreateMember() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Anggota berhasil ditambahkan',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menambahkan anggota',
+      });
     },
   });
 }
 
 export function useUpdateMember() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: ({ id, ...member }: Member) =>
       apiRequest(`/members/${id}`, {
@@ -322,16 +491,41 @@ export function useUpdateMember() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
       queryClient.invalidateQueries({ queryKey: ['member'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Anggota berhasil diperbarui',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal memperbarui anggota',
+      });
     },
   });
 }
 
 export function useDeleteMember() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (id: number) => apiRequest(`/members/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Anggota berhasil dihapus',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menghapus anggota',
+      });
     },
   });
 }
@@ -346,6 +540,7 @@ export function useDivisions() {
 
 export function useCreateDivision() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   return useMutation({
     mutationFn: (division: Omit<Division, 'id' | 'members' | 'created_at' | 'updated_at'>) =>
       apiRequest('/divisions', {
@@ -354,6 +549,18 @@ export function useCreateDivision() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['divisions'] });
+      addToast({
+        type: 'success',
+        title: 'Berhasil',
+        description: 'Divisi berhasil ditambahkan',
+      });
+    },
+    onError: (error: Error) => {
+      addToast({
+        type: 'error',
+        title: 'Gagal',
+        description: error.message || 'Gagal menambahkan divisi',
+      });
     },
   });
 }

@@ -46,6 +46,6 @@ INSERT INTO division_members (division_id, name, role, email, phone, department,
 (3, 'Amelya Sofia Anggraini', 'coordinator', 'exemple@exemple.com', '+62 818-9012-3456', 'Litbang', '/creative-male-student-photographer.jpg'),
 (3, 'Haza Satria Nagari', 'member', 'exemple@exemple.com', '+62 817-8901-2345', 'Litbang', '/creative-female-student-artist.jpg');
 
--- Insert default admin user (password: admin123)
-INSERT INTO users (username, email, password_hash, role) VALUES
-('admin', 'admin@hmif.itats.ac.id', '$2b$12$Blewhbkxjltl3hS55UbyG..Y7ZXCxKuNTt0dcVjxzgnFnt08errOO', 'admin');
+-- Insert default admin user (password: admin123) - linked to Ketua Umum member
+INSERT INTO users (username, email, password_hash, role, member_id) VALUES
+('admin', 'admin@hmif.itats.ac.id', '$2b$12$Blewhbkxjltl3hS55UbyG..Y7ZXCxKuNTt0dcVjxzgnFnt08errOO', 'admin', 1);

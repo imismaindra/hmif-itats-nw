@@ -256,7 +256,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center gap-3 mb-2">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: division.color }}
+                      style={{ backgroundColor: division.gradient_from }}
                     />
                     <span className="font-medium">{division.name}</span>
                   </div>

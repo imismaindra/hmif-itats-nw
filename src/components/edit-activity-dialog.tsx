@@ -29,7 +29,8 @@ export function EditActivityDialog({ activity, open, onOpenChange }: EditActivit
     title: '',
     category: '',
     date: '',
-    participants: '',
+    participants_count: '',
+    participants_description: '',
     description: '',
     status: 'Selesai',
     image: '',
@@ -44,7 +45,8 @@ export function EditActivityDialog({ activity, open, onOpenChange }: EditActivit
         title: activity.title,
         category: activity.category,
         date: activity.date,
-        participants: activity.participants || '',
+        participants_count: activity.participants_count?.toString() || '',
+        participants_description: activity.participants_description || '',
         description: activity.description,
         status: activity.status,
         image: activity.image || '',
@@ -131,14 +133,26 @@ export function EditActivityDialog({ activity, open, onOpenChange }: EditActivit
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="participants">Peserta</Label>
+              <Label htmlFor="participants_count">Jumlah Peserta</Label>
               <Input
-                id="participants"
-                value={formData.participants}
-                onChange={(e) => handleChange('participants', e.target.value)}
-                placeholder="Jumlah atau deskripsi peserta"
+                id="participants_count"
+                type="number"
+                value={formData.participants_count}
+                onChange={(e) => handleChange('participants_count', e.target.value)}
+                placeholder="0"
+                min="0"
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="participants_description">Deskripsi Peserta</Label>
+            <Input
+              id="participants_description"
+              value={formData.participants_description}
+              onChange={(e) => handleChange('participants_description', e.target.value)}
+              placeholder="Contoh: Mahasiswa aktif, Dosen, dll"
+            />
           </div>
 
           <div className="space-y-2">

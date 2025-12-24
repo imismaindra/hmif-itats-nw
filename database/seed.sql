@@ -58,16 +58,16 @@ INSERT INTO posts (title, slug, excerpt, content, date, author_id, author_name, 
  '2025-01-12 10:00:00');
 
 -- Insert activities
-INSERT INTO activities (title, slug, category, date, participants_count, participants_description, description, status, location, image, is_active) VALUES
-('Open Recruitment', 'open-recruitment', 'INTERNAL', '2024-01-01', 14, '14 peserta', 'Penerimaan anggota baru HMIF ITATS', 'completed', 'Ruang Seminar ITATS', '/kegiatan/oprec_24.jpg', TRUE),
-('Bakti Sosial 2025', 'bakti-sosial-2025', 'SOSIAL', '2025-04-01', 80, '80 peserta', 'Pelaksanaan bakti sosial dan santunan kepada panti asuhan', 'completed', 'Panti Asuhan Sejahtera', '/dummy.png', TRUE),
-('Webinar Kecerdasan Buatan', 'webinar-kecerdasan-buatan', 'AKADEMIK', '2024-05-01', 65, '65 peserta', 'Pelatihan intensif desain antarmuka dan pengalaman pengguna', 'completed', 'Zoom Meeting', '/dummy.png', TRUE),
-('Penyambutan Wisudawan 72', 'penyambutan-wisudawan-72', 'SOSIAL', '2025-05-01', 45, '45 Mahasiswa', 'Pelaksanaan penyambutan wisudawan ke-72 Teknik Informatika', 'completed', 'Auditorium ITATS', '/hmif-wisuda72.jpg', TRUE),
-('Gemini Tournament Mobile Legend', 'gemini-tournament-mobile-legend', 'KOMPETISI', '2024-06-01', 14, '14 Tim', 'Turnamen Mobile Legend antar angkatan dan jurusan', 'completed', 'Lab Komputer ITATS', '/kegiatan/ml.jpg', TRUE),
-('Gemini Tournament Futsal', 'gemini-tournament-futsal', 'KOMPETISI', '2024-06-01', 11, '11 Tim', 'Turnamen Futsal antar angkatan dan jurusan', 'completed', 'Lapangan Futsal ITATS', '/kegiatan/futsal_23.jpg', TRUE);
+INSERT INTO activities (title, slug, category, date, participants_count, participants_description, description, status, location, image) VALUES
+('Open Recruitment', 'open-recruitment', 'INTERNAL', '2024-01-01', 45, '45 calon anggota', 'Penerimaan anggota baru HMIF ITATS periode 2024/2025', 'completed', 'Ruang Seminar ITATS', '/kegiatan/oprec_24.jpg'),
+('Bakti Sosial 2025', 'bakti-sosial-2025', 'SOSIAL', '2025-04-01', 80, '80 peserta', 'Pelaksanaan bakti sosial dan santunan kepada panti asuhan', 'completed', 'Panti Asuhan Sejahtera', '/dummy.png'),
+('Webinar Kecerdasan Buatan', 'webinar-kecerdasan-buatan', 'AKADEMIK', '2024-05-01', 120, '120 peserta', 'Pelatihan intensif tentang Artificial Intelligence dan Machine Learning', 'completed', 'Zoom Meeting', '/dummy.png'),
+('Penyambutan Wisudawan 72', 'penyambutan-wisudawan-72', 'SOSIAL', '2025-05-01', 200, '200 mahasiswa', 'Pelaksanaan penyambutan wisudawan ke-72 Teknik Informatika ITATS', 'completed', 'Auditorium ITATS', '/hmif-wisuda72.jpg'),
+('Gemini Tournament Mobile Legend', 'gemini-tournament-mobile-legend', 'KOMPETISI', '2024-06-01', 32, '32 pemain', 'Turnamen Mobile Legend antar angkatan dan jurusan se-ITATS', 'completed', 'Lab Komputer ITATS', '/kegiatan/ml.jpg'),
+('Gemini Tournament Futsal', 'gemini-tournament-futsal', 'KOMPETISI', '2024-06-01', 88, '88 pemain', 'Turnamen Futsal antar angkatan dan jurusan se-ITATS', 'completed', 'Lapangan Futsal ITATS', '/kegiatan/futsal_23.jpg');
 
 -- Insert programs
-INSERT INTO programs (title, slug, description, start_date, end_date, status, progress, department, participants_count, budget_amount, budget_display, leader_id, leader_name, team, location, is_active) VALUES
+INSERT INTO programs (title, slug, description, start_date, end_date, status, progress, department, participants_count, budget_amount, budget_display, leader_id, leader_name, team, location) VALUES
 ('Promosi Himpunan Mahasiswa Teknik Informatika 2025',
  'promosi-himpunan-mahasiswa-teknik-informatika-2025',
  'Promosi dan pemberian wawasan tentang HMIF ITATS kepada mahasiswa baru Teknik Informatika ITATS.',
@@ -77,8 +77,7 @@ INSERT INTO programs (title, slug, description, start_date, end_date, status, pr
  0, 'Rp -',
  1, 'R. Abiyyu Ardi Lian Permadi',
  '[{"name": "Ahmad Maulana Ismaindra", "role": "Dokumentasi"}, {"name": "Tarishah Aridhah Zhafirah", "role": "Publikasi"}]',
- 'Graha ITATS',
- TRUE),
+ 'Graha ITATS'),
 
 ('Open Recruitment',
  'open-recruitment',
@@ -89,5 +88,4 @@ INSERT INTO programs (title, slug, description, start_date, end_date, status, pr
  100000, 'Rp 100.000',
  2, 'Nur Layli Ramadhani Sufyan',
  '[{"name": "Bagus Setiawan", "role": "Sekretaris"}, {"name": "Nur Aini", "role": "Koordinator Registrasi"}]',
- 'Ruang Seminar ITATS',
- TRUE);
+ 'Ruang Seminar ITATS');

@@ -77,13 +77,40 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { title, excerpt, content, date, category, priority, tags, image } = body;
 
+    // Validate category enum
+    const validCategories = ['pengumuman', 'berita'];
+    if (!validCategories.includes(category)) {
+      return NextResponse.json({
+        error: 'Invalid category. Must be one of: ' + validCategories.join(', ')
+      }, { status: 400 });
+    }
+
+    // Validate priority enum
+    const validPriorities = ['tinggi', 'sedang', 'rendah'];
+    if (priority && !validPriorities.includes(priority)) {
+      return NextResponse.json({
+        error: 'Invalid priority. Must be one of: ' + validPriorities.join(', ')
+      }, { status: 400 });
+    }
+
+    // Generate slug from title
+    const slug = title.toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+
     const sql = `
-      INSERT INTO posts (title, excerpt, content, date, author, category, priority, tags, image)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO posts (
+        title, slug, excerpt, content, date,
+        author_id, author_name, category, priority, tags, image
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const result = await query(sql, [
-      title, excerpt, content, date, memberName, category, priority || 'sedang',
+      title, slug, excerpt, content, date,
+      user.id, memberName, category, priority || 'sedang',
       JSON.stringify(tags || []), image
     ]);
 

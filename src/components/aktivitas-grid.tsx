@@ -2,16 +2,19 @@
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useState, useEffect } from "react"
+import Link from "next/link"
 
 interface Activity {
   id: number
   title: string
+  slug: string
   category: string
   date: string
-  participants: string
+  participants_count?: number
+  participants_description?: string
   description: string
   status: string
-  image: string
+  image?: string
 }
 
 export function AktivitasGrid() {
@@ -83,34 +86,42 @@ export function AktivitasGrid() {
               return `${monthNames[date.getMonth()]} ${date.getFullYear()}`
             }
 
+            const participantsText = activity.participants_count
+              ? `${activity.participants_count} peserta`
+              : (activity.participants_description || '');
+
             return (
-              <Card key={activity.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={activity.image || "/placeholder.svg"}
-                    alt={activity.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge className={getCategoryColor(activity.category)}>{activity.category}</Badge>
-                    <span className="text-xs text-muted-foreground">{formatDate(activity.date)}</span>
+              <Link key={activity.id} href={`/kegiatan/${activity.slug}`}>
+                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer">
+                  <div className="aspect-video overflow-hidden">
+                    <img
+                      src={activity.image || "/placeholder.svg"}
+                      alt={activity.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-2 text-balance">{activity.title}</h3>
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge className={getCategoryColor(activity.category)}>{activity.category}</Badge>
+                      <span className="text-xs text-muted-foreground">{formatDate(activity.date)}</span>
+                    </div>
 
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{activity.description}</p>
+                    <h3 className="text-lg font-semibold text-foreground mb-2 text-balance">{activity.title}</h3>
 
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{activity.participants}</span>
-                    <Badge variant="outline" className="text-green-600 border-green-200">
-                      ✓ {activity.status}
-                    </Badge>
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{activity.description}</p>
+
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{participantsText}</span>
+                      <Badge variant="outline" className="text-green-600 border-green-200">
+                        ✓ {activity.status === 'completed' ? 'Selesai' :
+                           activity.status === 'ongoing' ? 'Berlangsung' :
+                           activity.status === 'upcoming' ? 'Akan Datang' : activity.status}
+                      </Badge>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </Link>
             )
           })}
         </div>

@@ -180,7 +180,7 @@ export function ManagePostsDialog({ children }: ManagePostsDialogProps) {
                          post.priority === 'sedang' ? 'Sedang' : 'Rendah'}
                       </Badge>
                     </TableCell>
-                    <TableCell>{post.author}</TableCell>
+                    <TableCell>{post.author_name}</TableCell>
                     <TableCell>{new Date(post.date).toLocaleDateString('id-ID')}</TableCell>
                     <TableCell>
                       <div className="flex gap-1">

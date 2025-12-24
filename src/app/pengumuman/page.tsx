@@ -161,7 +161,7 @@ export default function PengumumanPage() {
                     <div className="flex items-center justify-between pt-4 border-t border-border/50">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <User className="w-4 h-4" />
-                        {pengumuman.author}
+                        {pengumuman.author_name}
                       </div>
 
                       <Button

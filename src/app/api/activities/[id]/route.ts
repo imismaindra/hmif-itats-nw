@@ -28,17 +28,61 @@ export async function PUT(
   try {
     const { id } = await context.params;
     const body = await request.json();
-    const { title, category, date, participants, description, status, image } = body;
+    const {
+      title,
+      category,
+      date,
+      end_date,
+      participants_count,
+      participants_description,
+      description,
+      detailed_description,
+      status,
+      location,
+      image,
+      photos
+    } = body;
+
+    // Validate category enum
+    const validCategories = ['INTERNAL', 'SOSIAL', 'AKADEMIK', 'KOMPETISI', 'LAINNYA'];
+    if (category && !validCategories.includes(category)) {
+      return NextResponse.json({
+        error: 'Invalid category. Must be one of: ' + validCategories.join(', ')
+      }, { status: 400 });
+    }
+
+    // Validate status enum
+    const validStatuses = ['upcoming', 'ongoing', 'completed', 'cancelled'];
+    if (status && !validStatuses.includes(status)) {
+      return NextResponse.json({
+        error: 'Invalid status. Must be one of: ' + validStatuses.join(', ')
+      }, { status: 400 });
+    }
+
+    // Generate slug from title if title is provided
+    let slug;
+    if (title) {
+      slug = title.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+    }
 
     const sql = `
       UPDATE activities
-      SET title = ?, category = ?, date = ?, participants = ?,
-          description = ?, status = ?, image = ?
+      SET title = ?, slug = ?, category = ?, date = ?, end_date = ?,
+          participants_count = ?, participants_description = ?,
+          description = ?, detailed_description = ?, status = ?,
+          location = ?, image = ?, photos = ?
       WHERE id = ?
     `;
 
     await query(sql, [
-      title, category, date, participants, description, status || 'Selesai', image, id
+      title, slug, category, date, end_date || null,
+      participants_count || 0, participants_description || '',
+      description || '', detailed_description || '', status || 'upcoming',
+      location || '', image || '', photos ? JSON.stringify(photos) : null, id
     ]);
 
     return NextResponse.json({ message: 'Activity updated successfully' });

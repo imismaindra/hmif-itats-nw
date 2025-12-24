@@ -34,10 +34,7 @@ export function StatsSection() {
 
         // Calculate total participants from activities
         const totalParticipants = activities.reduce((sum: number, activity: any) => {
-          const participantText = activity.participants || "0"
-          const match = participantText.match(/(\d+)/)
-          const count = match ? parseInt(match[1]) : 0
-          return sum + count
+          return sum + (activity.participants_count || 0)
         }, 0)
 
         // Calculate active months (unique months from activity dates)

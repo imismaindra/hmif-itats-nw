@@ -130,16 +130,16 @@ export default function AdminKegiatanPage() {
                       <Calendar className="w-4 h-4" />
                       {new Date(activity.date).toLocaleDateString('id-ID')}
                     </div>
-                    {activity.participants && (
+                    {activity.participants_count && (
                       <div className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
-                        {activity.participants}
+                        {activity.participants_count}
                       </div>
                     )}
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Badge variant={activity.status === 'Selesai' ? 'default' : 'secondary'}>
+                    <Badge variant={activity.status === 'completed' ? 'default' : 'secondary'}>
                       {activity.status}
                     </Badge>
                   </div>

@@ -39,9 +39,9 @@ export default function AdminPengumumanPage() {
 
   const filteredPosts = posts?.filter((post: Post) => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (post.excerpt && post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.author.toLowerCase().includes(searchTerm.toLowerCase());
+                         (post.author_name && post.author_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesCategory = categoryFilter === 'all' || post.category === categoryFilter;
 
@@ -199,7 +199,7 @@ export default function AdminPengumumanPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       <User className="w-4 h-4" />
-                      {post.author}
+                      {post.author_name || 'Unknown'}
                     </div>
                   </div>
 

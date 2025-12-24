@@ -5,15 +5,19 @@ import { useToast } from '@/components/ui/toast';
 export interface Post {
   id: number;
   title: string;
-  excerpt: string;
+  slug: string;
+  excerpt?: string;
   content: string;
   date: string;
-  author: string;
+  author_id?: number;
+  author_name?: string;
   category: 'pengumuman' | 'berita';
   priority: 'tinggi' | 'sedang' | 'rendah';
   tags: string[];
   image?: string;
+  views: number;
   is_active: boolean;
+  published_at?: string;
   created_at: string;
   updated_at: string;
 }
@@ -21,12 +25,18 @@ export interface Post {
 export interface Activity {
   id: number;
   title: string;
-  category: string;
+  slug: string;
+  category: 'INTERNAL' | 'SOSIAL' | 'AKADEMIK' | 'KOMPETISI' | 'LAINNYA';
   date: string;
-  participants: string;
+  end_date?: string;
+  participants_count?: number;
+  participants_description?: string;
   description: string;
-  status: string;
+  detailed_description?: string;
+  status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
+  location?: string;
   image?: string;
+  photos?: string[];
   created_at: string;
   updated_at: string;
 }
@@ -34,19 +44,22 @@ export interface Activity {
 export interface Program {
   id: number;
   title: string;
+  slug: string;
   description: string;
+  detailed_description?: string;
   start_date: string;
   end_date: string;
-  status: 'completed' | 'ongoing' | 'upcoming';
+  status: 'completed' | 'ongoing' | 'upcoming' | 'cancelled';
   progress: number;
   department: string;
-  participants: number;
-  budget: string;
-  leader: string;
+  participants_count?: number;
+  budget_amount?: number;
+  budget_display?: string;
+  leader_id?: number;
+  leader_name?: string;
   team: Array<{ name: string; role: string; avatar?: string }>;
   location: string;
   photos: string[];
-  detailed_description: string;
   created_at: string;
   updated_at: string;
 }

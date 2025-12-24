@@ -67,20 +67,40 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
-      title, description, start_date, end_date, status, progress,
-      department, participants, budget, leader, team, location, photos, detailed_description
+      title, description, detailed_description, start_date, end_date,
+      status, progress, department, participants_count, budget_amount,
+      budget_display, leader_id, leader_name, team, location, photos
     } = body;
 
+    // Validate status enum
+    const validStatuses = ['completed', 'ongoing', 'upcoming', 'cancelled'];
+    if (status && !validStatuses.includes(status)) {
+      return NextResponse.json({
+        error: 'Invalid status. Must be one of: ' + validStatuses.join(', ')
+      }, { status: 400 });
+    }
+
+    // Generate slug from title
+    const slug = title.toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+
     const sql = `
-      INSERT INTO programs (title, description, start_date, end_date, status, progress,
-                           department, participants, budget, leader, team, location, photos, detailed_description)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO programs (
+        title, slug, description, detailed_description, start_date, end_date,
+        status, progress, department, participants_count, budget_amount,
+        budget_display, leader_id, leader_name, team, location, photos
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const result = await query(sql, [
-      title, description, start_date, end_date, status || 'upcoming', progress || 0,
-      department, participants, budget, leader,
-      JSON.stringify(team || []), location, JSON.stringify(photos || []), detailed_description
+      title, slug, description || '', detailed_description || '', start_date, end_date,
+      status || 'upcoming', progress || 0, department || '', participants_count || 0,
+      budget_amount || 0, budget_display || '', leader_id || null, leader_name || '',
+      JSON.stringify(team || []), location || '', JSON.stringify(photos || [])
     ]);
 
     return NextResponse.json({

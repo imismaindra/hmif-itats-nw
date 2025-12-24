@@ -18,6 +18,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Activity as ActivityIcon } from 'lucide-react';
 import { FileUpload } from '@/components/ui/file-upload';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface AddActivityDialogProps {
   children: React.ReactNode;
@@ -29,9 +36,13 @@ export function AddActivityDialog({ children }: AddActivityDialogProps) {
     title: '',
     category: '',
     date: new Date().toISOString().split('T')[0],
-    participants: '',
+    end_date: '',
+    participants_count: '',
+    participants_description: '',
     description: '',
-    status: 'Selesai',
+    detailed_description: '',
+    status: 'completed',
+    location: '',
     image: '',
   });
   const [error, setError] = useState('');
@@ -50,9 +61,13 @@ export function AddActivityDialog({ children }: AddActivityDialogProps) {
         title: '',
         category: '',
         date: new Date().toISOString().split('T')[0],
-        participants: '',
+        end_date: '',
+        participants_count: '',
+        participants_description: '',
         description: '',
-        status: 'Selesai',
+        detailed_description: '',
+        status: 'completed',
+        location: '',
         image: '',
       });
     } catch (error) {
@@ -87,33 +102,53 @@ export function AddActivityDialog({ children }: AddActivityDialogProps) {
             </Alert>
           )}
 
+          <div className="space-y-2">
+            <Label htmlFor="title">Judul Kegiatan *</Label>
+            <Input
+              id="title"
+              value={formData.title}
+              onChange={(e) => handleChange('title', e.target.value)}
+              placeholder="Masukkan judul kegiatan"
+              required
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Judul Kegiatan *</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => handleChange('title', e.target.value)}
-                placeholder="Masukkan judul kegiatan"
-                required
-              />
+              <Label htmlFor="category">Kategori *</Label>
+              <Select value={formData.category} onValueChange={(value) => handleChange('category', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih kategori" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="INTERNAL">Internal</SelectItem>
+                  <SelectItem value="SOSIAL">Sosial</SelectItem>
+                  <SelectItem value="AKADEMIK">Akademik</SelectItem>
+                  <SelectItem value="KOMPETISI">Kompetisi</SelectItem>
+                  <SelectItem value="LAINNYA">Lainnya</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Kategori *</Label>
-              <Input
-                id="category"
-                value={formData.category}
-                onChange={(e) => handleChange('category', e.target.value)}
-                placeholder="Contoh: Workshop, Seminar, dll"
-                required
-              />
+              <Label htmlFor="status">Status *</Label>
+              <Select value={formData.status} onValueChange={(value) => handleChange('status', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="upcoming">Akan Datang</SelectItem>
+                  <SelectItem value="ongoing">Sedang Berlangsung</SelectItem>
+                  <SelectItem value="completed">Selesai</SelectItem>
+                  <SelectItem value="cancelled">Dibatalkan</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="date">Tanggal *</Label>
+              <Label htmlFor="date">Tanggal Mulai *</Label>
               <Input
                 id="date"
                 type="date"
@@ -124,35 +159,70 @@ export function AddActivityDialog({ children }: AddActivityDialogProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="participants">Peserta</Label>
+              <Label htmlFor="end_date">Tanggal Selesai</Label>
               <Input
-                id="participants"
-                value={formData.participants}
-                onChange={(e) => handleChange('participants', e.target.value)}
-                placeholder="Jumlah atau deskripsi peserta"
+                id="end_date"
+                type="date"
+                value={formData.end_date}
+                onChange={(e) => handleChange('end_date', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="participants_count">Jumlah Peserta</Label>
+              <Input
+                id="participants_count"
+                type="number"
+                value={formData.participants_count}
+                onChange={(e) => handleChange('participants_count', e.target.value)}
+                placeholder="0"
+                min="0"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="participants_description">Deskripsi Peserta</Label>
+              <Input
+                id="participants_description"
+                value={formData.participants_description}
+                onChange={(e) => handleChange('participants_description', e.target.value)}
+                placeholder="Contoh: Mahasiswa aktif, Dosen, dll"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="location">Lokasi</Label>
             <Input
-              id="status"
-              value={formData.status}
-              onChange={(e) => handleChange('status', e.target.value)}
-              placeholder="Status kegiatan"
+              id="location"
+              value={formData.location}
+              onChange={(e) => handleChange('location', e.target.value)}
+              placeholder="Tempat pelaksanaan kegiatan"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Deskripsi *</Label>
+            <Label htmlFor="description">Deskripsi Singkat *</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
-              placeholder="Deskripsi lengkap kegiatan"
-              rows={4}
+              placeholder="Deskripsi singkat kegiatan (untuk preview)"
+              rows={3}
               required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="detailed_description">Detail Kegiatan</Label>
+            <Textarea
+              id="detailed_description"
+              value={formData.detailed_description}
+              onChange={(e) => handleChange('detailed_description', e.target.value)}
+              placeholder="Deskripsi lengkap dan detail kegiatan (opsional)"
+              rows={4}
             />
           </div>
 

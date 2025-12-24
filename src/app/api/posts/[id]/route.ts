@@ -28,17 +28,44 @@ export async function PUT(
   try {
     const { id } = await context.params;
     const body = await request.json();
-    const { title, excerpt, content, date, author, category, priority, tags, image, is_active } = body;
+    const { title, excerpt, content, date, category, priority, tags, image, is_active } = body;
+
+    // Validate category enum
+    const validCategories = ['pengumuman', 'berita'];
+    if (category && !validCategories.includes(category)) {
+      return NextResponse.json({
+        error: 'Invalid category. Must be one of: ' + validCategories.join(', ')
+      }, { status: 400 });
+    }
+
+    // Validate priority enum
+    const validPriorities = ['tinggi', 'sedang', 'rendah'];
+    if (priority && !validPriorities.includes(priority)) {
+      return NextResponse.json({
+        error: 'Invalid priority. Must be one of: ' + validPriorities.join(', ')
+      }, { status: 400 });
+    }
+
+    // Generate slug from title if title is provided
+    let slug;
+    if (title) {
+      slug = title.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+    }
 
     const sql = `
       UPDATE posts
-      SET title = ?, excerpt = ?, content = ?, date = ?, author = ?,
+      SET title = ?, slug = ?, excerpt = ?, content = ?, date = ?,
           category = ?, priority = ?, tags = ?, image = ?, is_active = ?
       WHERE id = ?
     `;
 
     await query(sql, [
-      title, excerpt, content, date, author, category, priority || 'sedang',
+      title, slug, excerpt, content, date,
+      category, priority || 'sedang',
       JSON.stringify(tags || []), image, is_active !== undefined ? is_active : true, id
     ]);
 

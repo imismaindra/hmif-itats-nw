@@ -62,7 +62,7 @@ export function PengumumanDetail({ pengumuman, onBack }: PengumumanDetailProps) 
               </div>
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
-                <span>{pengumuman.author}</span>
+                <span>{pengumuman.author_name}</span>
               </div>
             </div>
 

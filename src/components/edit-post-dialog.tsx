@@ -50,7 +50,7 @@ export function EditPostDialog({ post, open, onOpenChange }: EditPostDialogProps
     if (post) {
       setFormData({
         title: post.title,
-        excerpt: post.excerpt,
+        excerpt: post.excerpt || '',
         content: post.content,
         date: post.date,
         category: post.category,

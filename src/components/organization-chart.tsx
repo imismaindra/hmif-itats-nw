@@ -1,7 +1,9 @@
+'use client';
+
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { useDivisions } from "@/lib/react-query"
+import { useDivisions, useMembers } from "@/lib/react-query"
 
 interface OrgMember {
   id: string
@@ -45,9 +47,10 @@ const MemberCard = ({ member }: { member: OrgMember }) => {
 }
 
 export default function OrganizationChart() {
-  const { data: divisions, isLoading } = useDivisions();
+  const { data: members, isLoading: membersLoading } = useMembers();
+  const { data: divisions, isLoading: divisionsLoading } = useDivisions();
 
-  if (isLoading) {
+  if (membersLoading || divisionsLoading) {
     return (
       <div className="w-full max-w-7xl mx-auto space-y-12">
         <div className="text-center">Memuat struktur organisasi...</div>
@@ -55,18 +58,24 @@ export default function OrganizationChart() {
     );
   }
 
-  // Flatten all members from all divisions
-  const allMembers: OrgMember[] = divisions?.flatMap((division: any) =>
-    division.members?.map((member: any) => ({
-      id: member.id.toString(),
-      name: member.name,
-      position: member.position,
-      department: division.name, // Use division name as department
-      image: member.image,
-      email: member.email,
-      level: member.level || 3,
-    })) || []
-  ) || [];
+  // Create a map of member_id to division_name for quick lookup
+  const memberDivisionMap: { [key: number]: string } = {};
+  divisions?.forEach((division: any) => {
+    division.members?.forEach((member: any) => {
+      memberDivisionMap[member.member_id] = division.name;
+    });
+  });
+
+  // Convert all members to OrgMember format
+  const allMembers: OrgMember[] = members?.map((member: any) => ({
+    id: member.id.toString(),
+    name: member.name,
+    position: member.position,
+    department: memberDivisionMap[member.id] || member.department, // Use division name if assigned, otherwise use member's department
+    image: member.image,
+    email: member.email,
+    level: member.level,
+  })) || [];
 
   // Group members by level
   const level1Members = allMembers.filter((m) => m.level === 1);

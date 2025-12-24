@@ -30,8 +30,10 @@ export function ManageDivisionsDialog({ children }: ManageDivisionsDialogProps) 
   const [showAddDivision, setShowAddDivision] = useState(false);
   const [newDivision, setNewDivision] = useState({
     name: '',
+    slug: '',
     description: '',
-    color: '#3b82f6',
+    gradient_from: 'blue-500',
+    gradient_to: 'cyan-500',
   });
 
   const { data: divisions, isLoading, error } = useDivisions();
@@ -42,7 +44,7 @@ export function ManageDivisionsDialog({ children }: ManageDivisionsDialogProps) 
 
     try {
       await createDivision.mutateAsync(newDivision);
-      setNewDivision({ name: '', description: '', color: '#3b82f6' });
+      setNewDivision({ name: '', slug: '', description: '', gradient_from: 'blue-500', gradient_to: 'cyan-500' });
       setShowAddDivision(false);
     } catch (error) {
       console.error('Failed to create division:', error);
@@ -163,22 +165,43 @@ export function ManageDivisionsDialog({ children }: ManageDivisionsDialogProps) 
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="division-color">Warna Tema</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="division-color"
-                  type="color"
-                  value={newDivision.color}
-                  onChange={(e) => setNewDivision(prev => ({ ...prev, color: e.target.value }))}
-                  className="w-16 h-10 p-1 border rounded"
-                />
-                <Input
-                  value={newDivision.color}
-                  onChange={(e) => setNewDivision(prev => ({ ...prev, color: e.target.value }))}
-                  placeholder="#3b82f6"
-                  className="flex-1"
-                />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="gradient-from">Gradient Dari</Label>
+                <select
+                  id="gradient-from"
+                  value={newDivision.gradient_from}
+                  onChange={(e) => setNewDivision(prev => ({ ...prev, gradient_from: e.target.value }))}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="blue-500">Biru</option>
+                  <option value="purple-500">Ungu</option>
+                  <option value="green-500">Hijau</option>
+                  <option value="red-500">Merah</option>
+                  <option value="yellow-500">Kuning</option>
+                  <option value="pink-500">Pink</option>
+                  <option value="indigo-500">Indigo</option>
+                  <option value="teal-500">Teal</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="gradient-to">Gradient Ke</Label>
+                <select
+                  id="gradient-to"
+                  value={newDivision.gradient_to}
+                  onChange={(e) => setNewDivision(prev => ({ ...prev, gradient_to: e.target.value }))}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="cyan-500">Cyan</option>
+                  <option value="pink-500">Pink</option>
+                  <option value="teal-500">Teal</option>
+                  <option value="purple-500">Ungu</option>
+                  <option value="blue-500">Biru</option>
+                  <option value="green-500">Hijau</option>
+                  <option value="red-500">Merah</option>
+                  <option value="yellow-500">Kuning</option>
+                </select>
               </div>
             </div>
 
@@ -220,8 +243,7 @@ function DivisionCard({ division }: DivisionCardProps) {
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div
-            className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: division.color }}
+            className={`w-4 h-4 rounded-full bg-gradient-to-r from-${division.gradient_from} to-${division.gradient_to}`}
           />
           <div>
             <h3 className="font-semibold">{division.name}</h3>

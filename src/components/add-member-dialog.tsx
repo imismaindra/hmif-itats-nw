@@ -35,9 +35,10 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
     name: '',
     position: '',
     department: '',
-    image: '',
     email: '',
+    phone: '',
     level: 3,
+    image: '',
   });
   const [error, setError] = useState('');
 
@@ -56,9 +57,10 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
         name: '',
         position: '',
         department: '',
-        image: '',
         email: '',
+        phone: '',
         level: 3,
+        image: '',
       });
     } catch (error) {
       setError('Gagal menambahkan anggota. Silakan coba lagi.');
@@ -149,15 +151,27 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              placeholder="email@example.com"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                placeholder="email@example.com"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">Telepon</Label>
+              <Input
+                id="phone"
+                value={formData.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+                placeholder="+628xxxxxxxxx"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

@@ -56,9 +56,11 @@ export interface Member {
   name: string;
   position: string;
   department: string;
-  image?: string;
   email?: string;
+  phone?: string;
   level: number;
+  image?: string;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -80,8 +82,12 @@ export interface DivisionMember {
 export interface Division {
   id: number;
   name: string;
+  slug: string;
   description: string;
-  color: string;
+  gradient_from: string;
+  gradient_to: string;
+  sort_order: number;
+  is_active: boolean;
   members: DivisionMember[];
   created_at: string;
   updated_at: string;

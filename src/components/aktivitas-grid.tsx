@@ -1,63 +1,55 @@
+'use client'
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react"
+
+interface Activity {
+  id: number
+  title: string
+  category: string
+  date: string
+  participants: string
+  description: string
+  status: string
+  image: string
+}
 
 export function AktivitasGrid() {
-  const activities = [
-    {
-      title: "Open Recruitmen",
-      category: "INTERNAL",
-      date: "Januari 2024",
-      participants: "14 peserta",
-      description: "Penerimaan anggota baru HMIF ITATS",
-      status: "Selesai",
-      image: "/kegiatan/oprec_24.jpg",
-    },
-    {
-      title: "Bakti Sosial 2025",
-      category: "SOSIAL",
-      date: "April 2025",
-      participants: "80 peserta",
-      description: "Pelaksanaan bakti sosial dan santunan kepada panti asuhan",
-      status: "Selesai",
-      image: "/dummy.png",
-    },
-    {
-      title: "Webinar Kecerdasan Buatan",
-      category: "AKADEMIK",
-      date: "Mei 2024",
-      participants: "65 peserta",
-      description: "Pelatihan intensif desain antarmuka dan pengalaman pengguna",
-      status: "Selesai",
-      image: "/dummy.png",
-    },
-    {
-      title: "Penyambutan Wisudawan 72",
-      category: "SOSIAL",
-      date: "Mei 2025",
-      participants: "45 Mahasiswa",
-      description: "Pelaksanaan penyambutan wisudawan ke-72 Teknik Informatika",
-      status: "Selesai",
-      image: "/hmif-wisuda72.jpg",
-    },
-    {
-      title: "Gemini Tournament Mobile Legend",
-      category: "KOMPETISI",
-      date: "Juni 2024",
-      participants: "14 Tim",
-      description: "Turnamen Mobile Legend antar angkatan dan jurusan ",
-      status: "Selesai",
-      image: "/kegiatan/ml.jpg",
-    },
-    {
-      title: "Gemini Tournament Futsal",
-      category: "KOMPETISI",
-      date: "Juni 2024",
-      participants: "11 Tim",
-      description: "Turnamen Futsal antar angkatan dan jurusan",
-      status: "Selesai",
-      image: "/kegiatan/futsal_23.jpg",
-    },
-  ]
+  const [activities, setActivities] = useState<Activity[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await fetch('/api/activities')
+        if (response.ok) {
+          const data = await response.json()
+          setActivities(data)
+        }
+      } catch (error) {
+        console.error('Error fetching activities:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchActivities()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="kegiatan" className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-balance mb-4">Program Kerja yang Telah Selesai</h2>
+            <p className="text-lg text-muted-foreground text-balance max-w-2xl mx-auto">
+              Memuat data kegiatan...
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -81,35 +73,46 @@ export function AktivitasGrid() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {activities.map((activity, index) => (
-            <Card key={index} className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
-              <div className="aspect-video overflow-hidden">
-                <img
-                  src={activity.image || "/placeholder.svg"}
-                  alt={activity.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
+          {activities.map((activity, index) => {
+            const formatDate = (dateString: string) => {
+              const date = new Date(dateString)
+              const monthNames = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+              ]
+              return `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+            }
 
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <Badge className={getCategoryColor(activity.category)}>{activity.category}</Badge>
-                  <span className="text-xs text-muted-foreground">{activity.date}</span>
+            return (
+              <Card key={activity.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                <div className="aspect-video overflow-hidden">
+                  <img
+                    src={activity.image || "/placeholder.svg"}
+                    alt={activity.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
 
-                <h3 className="text-lg font-semibold text-foreground mb-2 text-balance">{activity.title}</h3>
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <Badge className={getCategoryColor(activity.category)}>{activity.category}</Badge>
+                    <span className="text-xs text-muted-foreground">{formatDate(activity.date)}</span>
+                  </div>
 
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{activity.description}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-2 text-balance">{activity.title}</h3>
 
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{activity.participants}</span>
-                  <Badge variant="outline" className="text-green-600 border-green-200">
-                    ✓ {activity.status}
-                  </Badge>
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{activity.description}</p>
+
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{activity.participants}</span>
+                    <Badge variant="outline" className="text-green-600 border-green-200">
+                      ✓ {activity.status}
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            )
+          })}
         </div>
 
         <div className="text-center mt-12">

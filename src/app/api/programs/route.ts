@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
           team = program.team;
         }
       } catch (e) {
-        console.error('Error parsing team JSON:', e);
+        console.error('Error parsing team JSON for program', program.id, ':', e);
         team = [];
       }
 
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
           photos = program.photos;
         }
       } catch (e) {
-        console.error('Error parsing photos JSON:', e);
+        console.error('Error parsing photos JSON for program', program.id, ':', e);
         photos = [];
       }
 

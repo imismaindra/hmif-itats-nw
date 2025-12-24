@@ -8,9 +8,11 @@ export async function GET(
   try {
     const { id } = await context.params;
     const sql = `
-      SELECT * FROM division_members
-      WHERE division_id = ?
-      ORDER BY role DESC, name ASC
+      SELECT dm.*, m.name, m.position, m.image, m.email, m.level
+      FROM division_members dm
+      JOIN members m ON dm.member_id = m.id
+      WHERE dm.division_id = ?
+      ORDER BY dm.role DESC, m.name ASC
     `;
     const members = await query(sql, [id]);
     return NextResponse.json(members);
@@ -27,16 +29,18 @@ export async function POST(
   try {
     const { id } = await context.params;
     const body = await request.json();
-    const { name, role = 'member', email = '', phone = '', avatar = '', department = '' } = body;
+    const { member_id, role = 'member' } = body;
+
+    if (!member_id) {
+      return NextResponse.json({ error: 'member_id is required' }, { status: 400 });
+    }
 
     const sql = `
-      INSERT INTO division_members (division_id, name, role, email, phone, avatar, department)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO division_members (division_id, member_id, role)
+      VALUES (?, ?, ?)
     `;
 
-    const result = await query(sql, [
-      id, name, role, email, phone, avatar, department
-    ]);
+    const result = await query(sql, [id, member_id, role]);
 
     return NextResponse.json({
       id: (result as any).insertId,

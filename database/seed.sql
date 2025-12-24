@@ -37,14 +37,8 @@ INSERT INTO divisions (name, description, color) VALUES
 ('Divisi Media Digital & Hubungan Masyarakat', 'Menjalin komunikasi dan kerjasama dengan pihak eksternal', 'from-purple-500 to-pink-500'),
 ('Divisi Penelitian dan Pengembangan', 'Fokus pada kemampuan ilmiah dan teknologi (IPTEK), menghasilkan temuan baru, serta meningkatkan keahlian (soft skill dan hard skill) anggota', 'from-green-500 to-teal-500');
 
--- Insert division members
-INSERT INTO division_members (division_id, name, role, email, phone, department, avatar) VALUES
-(1, 'Firman Ardiansyah', 'coordinator', 'exemple@exemple.com', '+62 812-3456-7890', 'Koordinator', '/professional-male-student.png'),
-(1, 'Hasan Abdul Latif', 'member', 'exemple@exemple.com', '+62 813-4567-8901', 'Anggota', '/professional-female-student.png'),
-(2, 'Tarishah Aridhah Zhafirah', 'coordinator', 'exemple@exemple.com', '+62 815-6789-0123', 'Komunikasi', '/professional-female-student-smile.jpg'),
-(2, 'Ahmad Maulana Ismaindra', 'member', 'exemple@exemple.com', '+62 816-7890-1234', 'Public Relations', '/professional-male-student-confident.jpg'),
-(3, 'Amelya Sofia Anggraini', 'coordinator', 'exemple@exemple.com', '+62 818-9012-3456', 'Litbang', '/creative-male-student-photographer.jpg'),
-(3, 'Haza Satria Nagari', 'member', 'exemple@exemple.com', '+62 817-8901-2345', 'Litbang', '/creative-female-student-artist.jpg');
+-- Note: division_members will be populated through the admin interface
+-- by linking existing members to divisions
 
 -- Insert default admin user (password: admin123) - linked to Ketua Umum member
 INSERT INTO users (username, email, password_hash, role, member_id) VALUES

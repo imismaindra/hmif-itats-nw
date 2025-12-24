@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { useDivisions } from "@/lib/react-query"
 
 interface OrgMember {
   id: string
@@ -11,65 +12,6 @@ interface OrgMember {
   email?: string
   level: number
 }
-
-const organizationData: OrgMember[] = [
-  {
-    id: "1",
-    name: "R. Abiyyu Ardi Lian Permadi",
-    position: "Ketua Umum",
-    department: "Kepemimpinan",
-    level: 1,
-    image: "/anggota/abiyyu-kahim.png",
-  },
-  {
-    id: "2",
-    name: "Nur Layli Ramadhani Sufyan",
-    position: "Wakil Ketua",
-    department: "Kepemimpinan",
-    level: 1,
-    image: "/professional-female-student.png",
-  },
-  {
-    id: "3",
-    name: "Ridho Pangestu",
-    position: "Sekretaris Umum",
-    department: "Administrasi",
-    level: 2,
-    image: "/professional-male-secretary.jpg",
-  },
-  {
-    id: "4",
-    name: "Rizka Amalia",
-    position: "Bendahara Umum",
-    department: "Keuangan",
-    level: 2,
-    image: "/professional-female-treasurer.jpg",
-  },
-  {
-    id: "5",
-    name: "Firman Ardiansyah",
-    position: "Koordinator PSDM",
-    department: "Pengembangan SDM",
-    level: 3,
-    image: "/academic-coordinator-student.jpg",
-  },
-  {
-    id: "6",
-    name: "Tarishah Aridhah Zhafirah",
-    position: "Koordinator Media Digital dan Humas",
-    department: "Hubungan Masyarakat",
-    level: 3,
-    image: "/student-affairs-coordinator.jpg",
-  },
-  {
-    id: "7",
-    name: "Amelya Sofia Anggraini",
-    position: "Koordinator Litbang",
-    department: "Penelitian dan Pengembangan",
-    level: 3,
-    image: "/public-relations-student.jpg",
-  },
-]
 
 const MemberCard = ({ member }: { member: OrgMember }) => {
   const getInitials = (name: string) => {
@@ -103,63 +45,103 @@ const MemberCard = ({ member }: { member: OrgMember }) => {
 }
 
 export default function OrganizationChart() {
-  const level1Members = organizationData.filter((m) => m.level === 1)
-  const level2Members = organizationData.filter((m) => m.level === 2)
-  const level3Members = organizationData.filter((m) => m.level === 3)
+  const { data: divisions, isLoading } = useDivisions();
+
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto space-y-12">
+        <div className="text-center">Memuat struktur organisasi...</div>
+      </div>
+    );
+  }
+
+  // Flatten all members from all divisions
+  const allMembers: OrgMember[] = divisions?.flatMap((division: any) =>
+    division.members?.map((member: any) => ({
+      id: member.id.toString(),
+      name: member.name,
+      position: member.position,
+      department: division.name, // Use division name as department
+      image: member.image,
+      email: member.email,
+      level: member.level || 3,
+    })) || []
+  ) || [];
+
+  // Group members by level
+  const level1Members = allMembers.filter((m) => m.level === 1);
+  const level2Members = allMembers.filter((m) => m.level === 2);
+  const level3Members = allMembers.filter((m) => m.level === 3);
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-12">
       {/* Level 1 - Leadership */}
-      <div className="flex flex-col items-center space-y-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-primary">Pimpinan Organisasi</h2>
-          <div className="w-24 h-1 bg-primary/30 mx-auto rounded-full"></div>
-        </div>
+      {level1Members.length > 0 && (
+        <>
+          <div className="flex flex-col items-center space-y-8">
+            <div className="text-center space-y-2">
+              <h2 className="text-2xl font-bold text-primary">Pimpinan Organisasi</h2>
+              <div className="w-24 h-1 bg-primary/30 mx-auto rounded-full"></div>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
-          {level1Members.map((member) => (
-            <MemberCard key={member.id} member={member} />
-          ))}
-        </div>
-      </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
+              {level1Members.map((member) => (
+                <MemberCard key={member.id} member={member} />
+              ))}
+            </div>
+          </div>
 
-      {/* Connection Line */}
-      <div className="flex justify-center">
-        <div className="w-px h-12 bg-border"></div>
-      </div>
+          {/* Connection Line */}
+          <div className="flex justify-center">
+            <div className="w-px h-12 bg-border"></div>
+          </div>
+        </>
+      )}
 
       {/* Level 2 - Core Management */}
-      <div className="flex flex-col items-center space-y-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-primary">Manajemen Inti</h2>
-          <div className="w-24 h-1 bg-primary/30 mx-auto rounded-full"></div>
-        </div>
+      {level2Members.length > 0 && (
+        <>
+          <div className="flex flex-col items-center space-y-8">
+            <div className="text-center space-y-2">
+              <h2 className="text-2xl font-bold text-primary">Manajemen Inti</h2>
+              <div className="w-24 h-1 bg-primary/30 mx-auto rounded-full"></div>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
-          {level2Members.map((member) => (
-            <MemberCard key={member.id} member={member} />
-          ))}
-        </div>
-      </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
+              {level2Members.map((member) => (
+                <MemberCard key={member.id} member={member} />
+              ))}
+            </div>
+          </div>
 
-      {/* Connection Line */}
-      <div className="flex justify-center">
-        <div className="w-px h-12 bg-border"></div>
-      </div>
+          {/* Connection Line */}
+          <div className="flex justify-center">
+            <div className="w-px h-12 bg-border"></div>
+          </div>
+        </>
+      )}
 
       {/* Level 3 - Coordinators */}
-      <div className="flex flex-col items-center space-y-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-primary">Koordinator Bidang</h2>
-          <div className="w-24 h-1 bg-primary/30 mx-auto rounded-full"></div>
-        </div>
+      {level3Members.length > 0 && (
+        <div className="flex flex-col items-center space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-bold text-primary">Koordinator Bidang</h2>
+            <div className="w-24 h-1 bg-primary/30 mx-auto rounded-full"></div>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          {level3Members.map((member) => (
-            <MemberCard key={member.id} member={member} />
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            {level3Members.map((member) => (
+              <MemberCard key={member.id} member={member} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {allMembers.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">Belum ada anggota yang terdaftar dalam struktur organisasi</p>
+        </div>
+      )}
     </div>
-  )
+  );
 }

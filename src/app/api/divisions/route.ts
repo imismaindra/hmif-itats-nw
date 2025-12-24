@@ -7,12 +7,13 @@ export async function GET(request: NextRequest) {
     const divisionsSql = 'SELECT * FROM divisions ORDER BY name ASC';
     const divisions = await query(divisionsSql) as any[];
 
-    // Get all division members
+    // Get all division members with member details
     const membersSql = `
-      SELECT dm.*, d.name as division_name
+      SELECT dm.*, d.name as division_name, m.name, m.position, m.image, m.email, m.level
       FROM division_members dm
       JOIN divisions d ON dm.division_id = d.id
-      ORDER BY dm.division_id, dm.role DESC, dm.name
+      JOIN members m ON dm.member_id = m.id
+      ORDER BY dm.division_id, dm.role DESC, m.name
     `;
     const allMembers = await query(membersSql) as any[];
 
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description, color, members } = body;
+    const { name, description, color } = body;
 
     // Insert division
     const divisionSql = `
@@ -41,21 +42,6 @@ export async function POST(request: NextRequest) {
     `;
     const divisionResult = await query(divisionSql, [name, description, color]);
     const divisionId = (divisionResult as any).insertId;
-
-    // Insert members if provided
-    if (members && members.length > 0) {
-      const memberValues = members.map((member: any) => [
-        divisionId, member.name, member.role || 'member', member.email || '',
-        member.phone || '', member.avatar || '', member.department || ''
-      ]);
-
-      const memberSql = `
-        INSERT INTO division_members (division_id, name, role, email, phone, avatar, department)
-        VALUES ${memberValues.map(() => '(?, ?, ?, ?, ?, ?, ?)').join(', ')}
-      `;
-
-      await query(memberSql, memberValues.flat());
-    }
 
     return NextResponse.json({
       id: divisionId,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useCreateMember } from '@/lib/react-query';
+import { useCreateMember, useDivisions } from '@/lib/react-query';
 import {
   Dialog,
   DialogContent,
@@ -42,6 +42,7 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
   const [error, setError] = useState('');
 
   const createMember = useCreateMember();
+  const { data: divisions } = useDivisions();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,12 +119,18 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="department">Departemen/Divisi</Label>
-              <Input
-                id="department"
-                value={formData.department}
-                onChange={(e) => handleChange('department', e.target.value)}
-                placeholder="Divisi yang diikuti"
-              />
+              <Select value={formData.department} onValueChange={(value) => handleChange('department', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih divisi" />
+                </SelectTrigger>
+                <SelectContent>
+                  {divisions?.map((division: any) => (
+                    <SelectItem key={division.id} value={division.name}>
+                      {division.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

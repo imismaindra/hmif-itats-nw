@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useDivisions, useCreateDivision, DivisionMember, Division } from '@/lib/react-query';
+import { useDivisions, useCreateDivision, DivisionMember, Division, useMembers } from '@/lib/react-query';
 import { AddMemberDialog } from '@/components/add-member-dialog';
 import {
   Dialog,
@@ -262,11 +262,9 @@ function DivisionCard({ division }: DivisionCardProps) {
                       <Badge variant="outline" className="text-xs">
                         {member.role === 'coordinator' ? 'Koordinator' : 'Anggota'}
                       </Badge>
-                      {member.department && (
-                        <span className="text-xs text-muted-foreground">
-                          {member.department}
-                        </span>
-                      )}
+                      <span className="text-xs text-muted-foreground">
+                        Level {member.level}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -315,12 +313,11 @@ interface AddMemberToDivisionFormProps {
 
 function AddMemberToDivisionForm({ divisionId, onSuccess }: AddMemberToDivisionFormProps) {
   const [formData, setFormData] = useState({
-    name: '',
+    member_id: '',
     role: 'member' as 'coordinator' | 'member',
-    email: '',
-    phone: '',
-    department: '',
   });
+
+  const { data: members } = useMembers();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -335,11 +332,8 @@ function AddMemberToDivisionForm({ divisionId, onSuccess }: AddMemberToDivisionF
       if (response.ok) {
         onSuccess();
         setFormData({
-          name: '',
+          member_id: '',
           role: 'member',
-          email: '',
-          phone: '',
-          department: '',
         });
       }
     } catch (error) {
@@ -350,14 +344,21 @@ function AddMemberToDivisionForm({ divisionId, onSuccess }: AddMemberToDivisionF
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="member-name">Nama Lengkap *</Label>
-        <Input
-          id="member-name"
-          value={formData.name}
-          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-          placeholder="Masukkan nama lengkap"
+        <Label htmlFor="member-select">Pilih Anggota *</Label>
+        <select
+          id="member-select"
+          value={formData.member_id}
+          onChange={(e) => setFormData(prev => ({ ...prev, member_id: e.target.value }))}
+          className="w-full p-2 border rounded"
           required
-        />
+        >
+          <option value="">Pilih anggota...</option>
+          {members?.map((member: any) => (
+            <option key={member.id} value={member.id}>
+              {member.name} - {member.position}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="space-y-2">
@@ -371,37 +372,6 @@ function AddMemberToDivisionForm({ divisionId, onSuccess }: AddMemberToDivisionF
           <option value="member">Anggota</option>
           <option value="coordinator">Koordinator</option>
         </select>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="member-email">Email</Label>
-        <Input
-          id="member-email"
-          type="email"
-          value={formData.email}
-          onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-          placeholder="email@example.com"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="member-phone">Telepon</Label>
-        <Input
-          id="member-phone"
-          value={formData.phone}
-          onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-          placeholder="+62xxxxxxxxxx"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="member-department">Departemen</Label>
-        <Input
-          id="member-department"
-          value={formData.department}
-          onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
-          placeholder="Departemen asal"
-        />
       </div>
 
       <DialogFooter>

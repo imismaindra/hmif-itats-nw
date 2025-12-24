@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Suspense } from "react"
 import { Providers } from "@/lib/providers"
+import { AdminLayoutWrapper } from "@/components/admin-layout-wrapper"
 import "./globals.css"
 
 const GeistSans = Geist({
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "HMIF ITATS — Himpunan Mahasiswa Informatika",
     description: "Website resmi Himpunan Mahasiswa Informatika ITATS. Informasi struktur organisasi, divisi, program kerja, kegiatan, dan pengumuman/berita.",
-    url: "https://hmif.itats.ac.id",
+    url: "https://hmif-itats.sistemin.site",
     siteName: "HMIF ITATS",
     images: [
       {
@@ -70,15 +71,11 @@ export default function RootLayout({
           Loncat ke konten utama
         </a>
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <SiteHeader />
-          <main id="main-content" className="min-h-[60vh]">
-            <Providers>
-              {children}
-            </Providers>
-          </main>
-          <SiteFooter />
-        </Suspense>
+        <AdminLayoutWrapper>
+          <Providers>
+            {children}
+          </Providers>
+        </AdminLayoutWrapper>
 
         <Analytics />
       </body>

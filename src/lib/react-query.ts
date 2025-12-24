@@ -66,12 +66,13 @@ export interface Member {
 export interface DivisionMember {
   id: number;
   division_id: number;
+  member_id: number;
   name: string;
+  position: string;
   role: 'coordinator' | 'member';
-  email: string;
-  phone: string;
-  avatar?: string;
-  department: string;
+  email?: string;
+  image?: string;
+  level: number;
   division_name: string;
   created_at: string;
 }

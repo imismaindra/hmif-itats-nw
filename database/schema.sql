@@ -80,14 +80,12 @@ CREATE TABLE IF NOT EXISTS divisions (
 CREATE TABLE IF NOT EXISTS division_members (
   id INT AUTO_INCREMENT PRIMARY KEY,
   division_id INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
+  member_id INT NOT NULL,
   role ENUM('coordinator', 'member') DEFAULT 'member',
-  email VARCHAR(255),
-  phone VARCHAR(20),
-  avatar VARCHAR(255),
-  department VARCHAR(100),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (division_id) REFERENCES divisions(id) ON DELETE CASCADE
+  FOREIGN KEY (division_id) REFERENCES divisions(id) ON DELETE CASCADE,
+  FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_division_member (division_id, member_id)
 );
 
 -- Users table (Authentication)

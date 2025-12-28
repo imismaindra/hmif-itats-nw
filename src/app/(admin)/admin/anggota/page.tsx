@@ -39,11 +39,10 @@ export default function AdminAnggotaPage() {
 
   const filteredMembers = members?.filter((member: Member) => {
     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (member.position?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (member.email && member.email.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesLevel = levelFilter === 'all' || member.level.toString() === levelFilter;
+    const matchesLevel = levelFilter === 'all' || (member.position?.level || 3).toString() === levelFilter;
 
     return matchesSearch && matchesLevel;
   }) || [];
@@ -165,21 +164,12 @@ export default function AdminAnggotaPage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg">{member.name}</h3>
-                    <p className="text-sm text-muted-foreground">{member.position}</p>
+                    <p className="text-sm text-muted-foreground">{member.position?.name || 'No position'}</p>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="space-y-3">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    {member.department && (
-                      <div className="flex items-center gap-1">
-                        <UsersIcon className="w-4 h-4" />
-                        {member.department}
-                      </div>
-                    )}
-                  </div>
-
                   {member.email && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Mail className="w-4 h-4" />
@@ -188,8 +178,8 @@ export default function AdminAnggotaPage() {
                   )}
 
                   <div className="flex items-center gap-2">
-                    <Badge variant={getLevelColor(member.level)}>
-                      {getLevelLabel(member.level)}
+                    <Badge variant={getLevelColor(member.position?.level || 3)}>
+                      {getLevelLabel(member.position?.level || 3)}
                     </Badge>
                   </div>
                 </div>

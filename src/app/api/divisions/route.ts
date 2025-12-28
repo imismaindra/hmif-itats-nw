@@ -7,13 +7,14 @@ export async function GET(request: NextRequest) {
     const divisionsSql = 'SELECT * FROM divisions ORDER BY name ASC';
     const divisions = await query(divisionsSql) as any[];
 
-    // Get all division members with member details
+    // Get all division members with member details and position info
     const membersSql = `
-      SELECT dm.*, d.name as division_name, m.name, m.position, m.image, m.email, m.level
+      SELECT dm.*, d.name as division_name, m.name, p.name as position, m.image, m.email, p.level
       FROM division_members dm
       JOIN divisions d ON dm.division_id = d.id
       JOIN members m ON dm.member_id = m.id
-      ORDER BY dm.division_id, dm.role DESC, m.name
+      LEFT JOIN positions p ON m.position_id = p.id
+      ORDER BY dm.division_id, dm.is_coordinator DESC, m.name
     `;
     const allMembers = await query(membersSql) as any[];
 
@@ -33,14 +34,17 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description, color } = body;
+    const { name, description, gradient_from, gradient_to } = body;
+
+    // Generate slug from name
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
     // Insert division
     const divisionSql = `
-      INSERT INTO divisions (name, description, color)
-      VALUES (?, ?, ?)
+      INSERT INTO divisions (name, slug, description, gradient_from, gradient_to)
+      VALUES (?, ?, ?, ?, ?)
     `;
-    const divisionResult = await query(divisionSql, [name, description, color]);
+    const divisionResult = await query(divisionSql, [name, slug, description, gradient_from, gradient_to]);
     const divisionId = (divisionResult as any).insertId;
 
     return NextResponse.json({

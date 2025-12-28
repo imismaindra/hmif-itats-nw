@@ -190,6 +190,7 @@ export function AddPostDialog({ children }: AddPostDialogProps) {
               onChange={(url) => handleChange('image', url)}
               placeholder="Pilih gambar untuk pengumuman"
               maxSize={5}
+              category="berita"
             />
           </div>
 

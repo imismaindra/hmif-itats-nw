@@ -13,21 +13,37 @@ USE hmif_itats;
 -- Core Tables
 -- ==========================================
 
--- Members table (HARUS DIBUAT PERTAMA - referenced by users & programs)
+-- Positions table (HARUS DIBUAT PERTAMA - referenced by members)
+CREATE TABLE IF NOT EXISTS positions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  level TINYINT NOT NULL COMMENT 'Hierarchy level: 1=Highest, 2=Middle, 3=Lower',
+  can_be_empty BOOLEAN DEFAULT FALSE COMMENT 'Whether this position can be vacant',
+  division_id INT COMMENT 'NULL for organization-wide positions, specific division ID for division positions',
+  sort_order INT DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (division_id) REFERENCES divisions(id) ON DELETE CASCADE,
+  INDEX idx_level (level),
+  INDEX idx_division_id (division_id),
+  INDEX idx_sort_order (sort_order),
+  INDEX idx_is_active (is_active)
+) ENGINE=InnoDB;
+
+-- Members table (referenced by users & programs)
 CREATE TABLE IF NOT EXISTS members (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  position VARCHAR(100) NOT NULL,
-  department VARCHAR(100),
+  position_id INT,
   email VARCHAR(255) UNIQUE,
   phone VARCHAR(20),
-  level TINYINT NOT NULL DEFAULT 3 COMMENT '1=Ketua/Wakil, 2=Sekretaris/Bendahara, 3=Koordinator/Anggota',
   image VARCHAR(500),
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_position (position),
-  INDEX idx_level (level),
+  FOREIGN KEY (position_id) REFERENCES positions(id) ON DELETE SET NULL,
+  INDEX idx_position_id (position_id),
   INDEX idx_is_active (is_active)
 ) ENGINE=InnoDB;
 
@@ -187,16 +203,16 @@ CREATE TABLE IF NOT EXISTS division_members (
   id INT AUTO_INCREMENT PRIMARY KEY,
   division_id INT NOT NULL,
   member_id INT NOT NULL,
-  role ENUM('coordinator', 'member') NOT NULL DEFAULT 'member',
+  is_coordinator BOOLEAN DEFAULT FALSE COMMENT 'Whether this member is a coordinator of the division',
   joined_date DATE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (division_id) REFERENCES divisions(id) ON DELETE CASCADE,
   FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
-  UNIQUE KEY unique_division_member (division_id, member_id),
+  UNIQUE KEY unique_member (member_id) COMMENT 'One member can only be in one division',
   INDEX idx_division_id (division_id),
   INDEX idx_member_id (member_id),
-  INDEX idx_role (role)
+  INDEX idx_is_coordinator (is_coordinator)
 ) ENGINE=InnoDB;
 
 -- ==========================================

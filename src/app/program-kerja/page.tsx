@@ -59,10 +59,10 @@ const programKerjaData: ProgramKerja[] = [
     participants: 99,
     budget: "Rp -",
     leader: "R. Abiyyu Ardi Lian Permadi",
-    leaderAvatar: "/anggota/abiyyu-kahim.png",
+    leaderAvatar: "/uploads/anggota/abiyyu-kahim.png",
     team: [
-      { name: "Ahmad Maulana Ismaindra", role: "Dokumentasi", avatar: "/anggota/jawir.png" },
-      { name: "Tarishah Aridhah Zhafirah", role: "Publikasi", avatar: "/anggota/tata_akmj.png" },
+      { name: "Ahmad Maulana Ismaindra", role: "Dokumentasi", avatar: "/uploads/anggota/jawir.png" },
+      { name: "Tarishah Aridhah Zhafirah", role: "Publikasi", avatar: "/uploads/anggota/tata_akmj.png" },
     ],
     location: "Graha ITATS",
     photos: ["/poster_pomosi.png"],

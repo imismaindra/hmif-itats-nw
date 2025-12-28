@@ -1,15 +1,27 @@
 -- Updated seed data for HMIF ITATS with new schema structure
 USE hmif_itats;
 
--- Insert members first (referenced by other tables)
-INSERT INTO members (name, position, department, email, phone, level, image, is_active) VALUES
-('R. Abiyyu Ardi Lian Permadi', 'Ketua Umum', 'Kepemimpinan', 'abiyyu@hmif.itats.ac.id', '+6281234567890', 1, '/anggota/abiyyu-kahim.png', TRUE),
-('Nur Layli Ramadhani Sufyan', 'Wakil Ketua', 'Kepemimpinan', 'layli@hmif.itats.ac.id', '+6281234567891', 1, '/professional-female-student.png', TRUE),
-('Ridho Pangestu', 'Sekretaris Umum', 'Administrasi', 'ridho@hmif.itats.ac.id', '+6281234567892', 2, '/professional-male-secretary.jpg', TRUE),
-('Rizka Amalia', 'Bendahara Umum', 'Keuangan', 'rizka@hmif.itats.ac.id', '+6281234567893', 2, '/professional-female-treasurer.jpg', TRUE),
-('Firman Ardiansyah', 'Koordinator PSDM', 'Pengembangan SDM', 'firman@hmif.itats.ac.id', '+6281234567894', 3, '/academic-coordinator-student.jpg', TRUE),
-('Tarishah Aridhah Zhafirah', 'Koordinator Media Digital dan Humas', 'Hubungan Masyarakat', 'tarishah@hmif.itats.ac.id', '+6281234567895', 3, '/student-affairs-coordinator.jpg', TRUE),
-('Amelya Sofia Anggraini', 'Koordinator Litbang', 'Penelitian dan Pengembangan', 'amelya@hmif.itats.ac.id', '+6281234567896', 3, '/public-relations-student.jpg', TRUE);
+-- Insert positions first (referenced by members)
+INSERT INTO positions (name, level, can_be_empty, division_id, sort_order) VALUES
+-- Organization-wide positions (can be empty)
+('Ketua Umum', 1, TRUE, NULL, 1),
+('Wakil Ketua Umum', 1, TRUE, NULL, 2),
+('Sekretaris Umum', 2, TRUE, NULL, 3),
+('Bendahara Umum', 2, TRUE, NULL, 4),
+
+-- Division positions (cannot be empty)
+('Koordinator Divisi', 3, FALSE, NULL, 5),
+('Anggota Divisi', 3, FALSE, NULL, 6);
+
+-- Insert members with position_id references
+INSERT INTO members (name, position_id, email, phone, image, is_active) VALUES
+('R. Abiyyu Ardi Lian Permadi', 1, 'abiyyu@hmif.itats.ac.id', '+6281234567890', '/anggota/abiyyu-kahim.png', TRUE), -- Ketua Umum
+('Nur Layli Ramadhani Sufyan', 2, 'layli@hmif.itats.ac.id', '+6281234567891', '/professional-female-student.png', TRUE), -- Wakil Ketua
+('Ridho Pangestu', 3, 'ridho@hmif.itats.ac.id', '+6281234567892', '/professional-male-secretary.jpg', TRUE), -- Sekretaris Umum
+('Rizka Amalia', 4, 'rizka@hmif.itats.ac.id', '+6281234567893', '/professional-female-treasurer.jpg', TRUE), -- Bendahara Umum
+('Firman Ardiansyah', 5, 'firman@hmif.itats.ac.id', '+6281234567894', '/academic-coordinator-student.jpg', TRUE), -- Koordinator Divisi
+('Tarishah Aridhah Zhafirah', 5, 'tarishah@hmif.itats.ac.id', '+6281234567895', '/student-affairs-coordinator.jpg', TRUE), -- Koordinator Divisi
+('Amelya Sofia Anggraini', 5, 'amelya@hmif.itats.ac.id', '+6281234567896', '/public-relations-student.jpg', TRUE); -- Koordinator Divisi
 
 -- Insert users (password: admin123)
 INSERT INTO users (username, email, password_hash, role, member_id, is_active) VALUES
@@ -22,10 +34,10 @@ INSERT INTO divisions (name, slug, description, gradient_from, gradient_to, sort
 ('Divisi Penelitian dan Pengembangan', 'penelitian-pengembangan', 'Fokus pada kemampuan ilmiah dan teknologi (IPTEK), menghasilkan temuan baru, serta meningkatkan keahlian (soft skill dan hard skill) anggota', 'green-500', 'teal-500', 3, TRUE);
 
 -- Insert division members
-INSERT INTO division_members (division_id, member_id, role, joined_date) VALUES
-(1, 5, 'coordinator', '2024-01-01'), -- Firman Ardiansyah as coordinator of PSDM
-(2, 6, 'coordinator', '2024-01-01'), -- Tarishah Aridhah Zhafirah as coordinator of Media Digital & Humas
-(3, 7, 'coordinator', '2024-01-01'); -- Amelya Sofia Anggraini as coordinator of Litbang
+INSERT INTO division_members (division_id, member_id, is_coordinator, joined_date) VALUES
+(1, 5, TRUE, '2024-01-01'), -- Firman Ardiansyah as coordinator of PSDM
+(2, 6, TRUE, '2024-01-01'), -- Tarishah Aridhah Zhafirah as coordinator of Media Digital & Humas
+(3, 7, TRUE, '2024-01-01'); -- Amelya Sofia Anggraini as coordinator of Litbang
 
 -- Insert posts with proper structure
 INSERT INTO posts (title, slug, excerpt, content, date, author_id, author_name, category, priority, tags, image, is_active, published_at) VALUES

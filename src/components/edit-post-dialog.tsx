@@ -232,6 +232,7 @@ export function EditPostDialog({ post, open, onOpenChange }: EditPostDialogProps
                 onChange={(url) => handleChange('image', url)}
                 placeholder="Pilih gambar untuk pengumuman"
                 maxSize={5}
+                category="berita"
               />
             </div>
 

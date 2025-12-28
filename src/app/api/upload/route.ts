@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData();
     const file = formData.get('file') as File;
+    const category = formData.get('category') as string;
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
@@ -60,10 +61,12 @@ export async function POST(request: NextRequest) {
     const extension = file.name.split('.').pop();
     const filename = `${timestamp}-${randomString}.${extension}`;
 
-    // Create uploads directory if it doesn't exist
+    // Create uploads directory structure if it doesn't exist
     const uploadsDir = join(process.cwd(), 'public', 'uploads');
+    const categoryDir = category ? join(uploadsDir, category) : uploadsDir;
+
     try {
-      await mkdir(uploadsDir, { recursive: true });
+      await mkdir(categoryDir, { recursive: true });
     } catch (error) {
       // Directory might already exist, ignore error
     }
@@ -71,11 +74,11 @@ export async function POST(request: NextRequest) {
     // Save file
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const filePath = join(uploadsDir, filename);
+    const filePath = join(categoryDir, filename);
     await writeFile(filePath, buffer);
 
     // Return the public URL
-    const fileUrl = `/uploads/${filename}`;
+    const fileUrl = category ? `/uploads/${category}/${filename}` : `/uploads/${filename}`;
 
     return NextResponse.json({
       success: true,

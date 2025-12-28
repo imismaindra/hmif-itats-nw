@@ -64,14 +64,25 @@ export interface Program {
   updated_at: string;
 }
 
+export interface Position {
+  id: number;
+  name: string;
+  level: number;
+  can_be_empty: boolean;
+  division_id?: number;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Member {
   id: number;
   name: string;
-  position: string;
-  department: string;
+  position_id?: number;
+  position?: Position; // Joined data
   email?: string;
   phone?: string;
-  level: number;
   image?: string;
   is_active: boolean;
   created_at: string;
@@ -83,11 +94,11 @@ export interface DivisionMember {
   division_id: number;
   member_id: number;
   name: string;
-  position: string;
-  role: 'coordinator' | 'member';
+  position?: string;
+  is_coordinator: boolean;
   email?: string;
   image?: string;
-  level: number;
+  level?: number;
   division_name: string;
   created_at: string;
 }

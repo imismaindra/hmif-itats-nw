@@ -10,7 +10,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,12 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Users, Plus, Settings, UserPlus, Crown, User } from 'lucide-react';
 
-interface ManageDivisionsDialogProps {
-  children: React.ReactNode;
-}
-
-export function ManageDivisionsDialog({ children }: ManageDivisionsDialogProps) {
-  const [open, setOpen] = useState(false);
+export default function AdminStrukturOrganisasiPage() {
   const [showAddDivision, setShowAddDivision] = useState(false);
   const [newDivision, setNewDivision] = useState({
     name: '',
@@ -53,181 +47,171 @@ export function ManageDivisionsDialog({ children }: ManageDivisionsDialogProps) 
 
   if (isLoading) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          {children}
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[800px] max-h-[80vh]">
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">Kelola Struktur Organisasi</h1>
+              <p className="text-muted-foreground">Kelola divisi dan anggota HMIF ITATS</p>
+            </div>
+          </div>
           <div className="flex items-center justify-center p-8">
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          {children}
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[800px]">
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">Kelola Struktur Organisasi</h1>
+              <p className="text-muted-foreground">Kelola divisi dan anggota HMIF ITATS</p>
+            </div>
+          </div>
           <Alert variant="destructive">
             <AlertDescription>Gagal memuat data divisi</AlertDescription>
           </Alert>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     );
   }
 
   return (
-    <>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          {children}
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[1000px] max-h-[90vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Kelola Divisi & Anggota
-            </DialogTitle>
-            <DialogDescription>
+    <div className="p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Kelola Struktur Organisasi</h1>
+            <p className="text-muted-foreground">
               Kelola divisi organisasi dan anggota yang tergabung di dalamnya
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="flex justify-between items-center mb-4">
-            <p className="text-sm text-muted-foreground">
-              Total: {divisions?.length || 0} divisi
             </p>
-            <Button
-              size="sm"
-              onClick={() => setShowAddDivision(true)}
-              disabled={createDivision.isPending}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Tambah Divisi
-            </Button>
           </div>
+          <Button
+            size="sm"
+            onClick={() => setShowAddDivision(true)}
+            disabled={createDivision.isPending}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Tambah Divisi
+          </Button>
+        </div>
 
-          <div className="overflow-y-auto max-h-[60vh] space-y-4">
-            {divisions?.map((division: Division) => (
-              <DivisionCard key={division.id} division={division} />
-            ))}
+        {/* Divisions List */}
+        <div className="space-y-4">
+          {divisions?.map((division: Division) => (
+            <DivisionCard key={division.id} division={division} />
+          ))}
 
-            {divisions?.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground">
-                Belum ada divisi. Klik "Tambah Divisi" untuk membuat divisi pertama.
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Tutup
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Division Dialog */}
-      <Dialog open={showAddDivision} onOpenChange={setShowAddDivision}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Tambah Divisi Baru</DialogTitle>
-            <DialogDescription>
-              Buat divisi baru untuk organisasi
-            </DialogDescription>
-          </DialogHeader>
-
-          <form onSubmit={handleCreateDivision} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="division-name">Nama Divisi *</Label>
-              <Input
-                id="division-name"
-                value={newDivision.name}
-                onChange={(e) => setNewDivision(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Contoh: Divisi IT, Divisi Acara, dll"
-                required
-              />
+          {divisions?.length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              Belum ada divisi. Klik "Tambah Divisi" untuk membuat divisi pertama.
             </div>
+          )}
+        </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="division-description">Deskripsi</Label>
-              <Textarea
-                id="division-description"
-                value={newDivision.description}
-                onChange={(e) => setNewDivision(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Deskripsi tugas dan fungsi divisi"
-                rows={3}
-              />
-            </div>
+        {/* Add Division Dialog */}
+        <Dialog open={showAddDivision} onOpenChange={setShowAddDivision}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Tambah Divisi Baru</DialogTitle>
+              <DialogDescription>
+                Buat divisi baru untuk organisasi
+              </DialogDescription>
+            </DialogHeader>
 
-            <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleCreateDivision} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="gradient-from">Gradient Dari</Label>
-                <select
-                  id="gradient-from"
-                  value={newDivision.gradient_from}
-                  onChange={(e) => setNewDivision(prev => ({ ...prev, gradient_from: e.target.value }))}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="blue-500">Biru</option>
-                  <option value="purple-500">Ungu</option>
-                  <option value="green-500">Hijau</option>
-                  <option value="red-500">Merah</option>
-                  <option value="yellow-500">Kuning</option>
-                  <option value="pink-500">Pink</option>
-                  <option value="indigo-500">Indigo</option>
-                  <option value="teal-500">Teal</option>
-                </select>
+                <Label htmlFor="division-name">Nama Divisi *</Label>
+                <Input
+                  id="division-name"
+                  value={newDivision.name}
+                  onChange={(e) => setNewDivision(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Contoh: Divisi IT, Divisi Acara, dll"
+                  required
+                />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="gradient-to">Gradient Ke</Label>
-                <select
-                  id="gradient-to"
-                  value={newDivision.gradient_to}
-                  onChange={(e) => setNewDivision(prev => ({ ...prev, gradient_to: e.target.value }))}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="cyan-500">Cyan</option>
-                  <option value="pink-500">Pink</option>
-                  <option value="teal-500">Teal</option>
-                  <option value="purple-500">Ungu</option>
-                  <option value="blue-500">Biru</option>
-                  <option value="green-500">Hijau</option>
-                  <option value="red-500">Merah</option>
-                  <option value="yellow-500">Kuning</option>
-                </select>
+                <Label htmlFor="division-description">Deskripsi</Label>
+                <Textarea
+                  id="division-description"
+                  value={newDivision.description}
+                  onChange={(e) => setNewDivision(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Deskripsi tugas dan fungsi divisi"
+                  rows={3}
+                />
               </div>
-            </div>
 
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowAddDivision(false)}
-              >
-                Batal
-              </Button>
-              <Button type="submit" disabled={createDivision.isPending}>
-                {createDivision.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Membuat...
-                  </>
-                ) : (
-                  'Buat Divisi'
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="gradient-from">Gradient Dari</Label>
+                  <select
+                    id="gradient-from"
+                    value={newDivision.gradient_from}
+                    onChange={(e) => setNewDivision(prev => ({ ...prev, gradient_from: e.target.value }))}
+                    className="w-full p-2 border rounded"
+                  >
+                    <option value="blue-500">Biru</option>
+                    <option value="purple-500">Ungu</option>
+                    <option value="green-500">Hijau</option>
+                    <option value="red-500">Merah</option>
+                    <option value="yellow-500">Kuning</option>
+                    <option value="pink-500">Pink</option>
+                    <option value="indigo-500">Indigo</option>
+                    <option value="teal-500">Teal</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="gradient-to">Gradient Ke</Label>
+                  <select
+                    id="gradient-to"
+                    value={newDivision.gradient_to}
+                    onChange={(e) => setNewDivision(prev => ({ ...prev, gradient_to: e.target.value }))}
+                    className="w-full p-2 border rounded"
+                  >
+                    <option value="cyan-500">Cyan</option>
+                    <option value="pink-500">Pink</option>
+                    <option value="teal-500">Teal</option>
+                    <option value="purple-500">Ungu</option>
+                    <option value="blue-500">Biru</option>
+                    <option value="green-500">Hijau</option>
+                    <option value="red-500">Merah</option>
+                    <option value="yellow-500">Kuning</option>
+                  </select>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowAddDivision(false)}
+                >
+                  Batal
+                </Button>
+                <Button type="submit" disabled={createDivision.isPending}>
+                  {createDivision.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Membuat...
+                    </>
+                  ) : (
+                    'Buat Divisi'
+                  )}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
   );
 }
 
@@ -285,7 +269,7 @@ function DivisionCard({ division }: DivisionCardProps) {
                         {member.is_coordinator ? 'Koordinator' : 'Anggota'}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
-                        {member.position || 'No position'}
+                        Level {member.level}
                       </span>
                     </div>
                   </div>

@@ -264,7 +264,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between text-sm">
                     <span>{division.members?.length || 0} anggota</span>
                     <Badge variant="outline" className="text-xs">
-                      {division.members?.filter((m: DivisionMember) => m.role === 'coordinator').length || 0} koordinator
+                      {division.members?.filter((m: DivisionMember) => m.is_coordinator).length || 0} koordinator
                     </Badge>
                   </div>
                 </div>

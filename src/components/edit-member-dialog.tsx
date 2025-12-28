@@ -33,11 +33,10 @@ interface EditMemberDialogProps {
 export function EditMemberDialog({ member, open, onOpenChange }: EditMemberDialogProps) {
   const [formData, setFormData] = useState({
     name: '',
-    position: '',
-    department: '',
-    image: '',
+    position_id: '',
     email: '',
-    level: 3,
+    phone: '',
+    image: '',
   });
   const [error, setError] = useState('');
 
@@ -47,11 +46,10 @@ export function EditMemberDialog({ member, open, onOpenChange }: EditMemberDialo
     if (member) {
       setFormData({
         name: member.name,
-        position: member.position,
-        department: member.department,
-        image: member.image || '',
+        position_id: member.position_id?.toString() || '',
         email: member.email || '',
-        level: member.level,
+        phone: member.phone || '',
+        image: member.image || '',
       });
     }
   }, [member]);
@@ -61,10 +59,13 @@ export function EditMemberDialog({ member, open, onOpenChange }: EditMemberDialo
     if (!member) return;
 
     try {
-      await updateMember.mutateAsync({
+      const submitData = {
         ...member,
         ...formData,
-      });
+        position_id: formData.position_id ? parseInt(formData.position_id) : undefined,
+      };
+
+      await updateMember.mutateAsync(submitData);
 
       onOpenChange(false);
     } catch (error) {
@@ -111,53 +112,44 @@ export function EditMemberDialog({ member, open, onOpenChange }: EditMemberDialo
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="position">Jabatan *</Label>
-              <Input
-                id="position"
-                value={formData.position}
-                onChange={(e) => handleChange('position', e.target.value)}
-                placeholder="Contoh: Ketua, Sekretaris, dll"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="department">Departemen/Divisi</Label>
-              <Input
-                id="department"
-                value={formData.department}
-                onChange={(e) => handleChange('department', e.target.value)}
-                placeholder="Divisi yang diikuti"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="level">Level</Label>
-              <Select value={formData.level.toString()} onValueChange={(value) => handleChange('level', parseInt(value))}>
+              <Label htmlFor="position_id">Posisi *</Label>
+              <Select value={formData.position_id} onValueChange={(value) => handleChange('position_id', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Pilih level" />
+                  <SelectValue placeholder="Pilih posisi" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">Pengurus Inti</SelectItem>
-                  <SelectItem value="2">Koordinator</SelectItem>
-                  <SelectItem value="3">Staff</SelectItem>
-                  <SelectItem value="4">Anggota Biasa</SelectItem>
+                  <SelectItem value="1">Ketua Umum</SelectItem>
+                  <SelectItem value="2">Wakil Ketua Umum</SelectItem>
+                  <SelectItem value="3">Sekretaris Umum</SelectItem>
+                  <SelectItem value="4">Bendahara Umum</SelectItem>
+                  <SelectItem value="5">Koordinator Divisi</SelectItem>
+                  <SelectItem value="6">Anggota Divisi</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              placeholder="email@example.com"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                placeholder="email@example.com"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">Telepon</Label>
+              <Input
+                id="phone"
+                value={formData.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+                placeholder="+628xxxxxxxxx"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -167,6 +159,7 @@ export function EditMemberDialog({ member, open, onOpenChange }: EditMemberDialo
               onChange={(url) => handleChange('image', url)}
               placeholder="Pilih foto profil anggota"
               maxSize={5}
+              category="anggota"
             />
           </div>
 

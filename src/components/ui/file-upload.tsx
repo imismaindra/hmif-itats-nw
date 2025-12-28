@@ -13,6 +13,7 @@ interface FileUploadProps {
   accept?: string;
   maxSize?: number; // in MB
   placeholder?: string;
+  category?: string;
 }
 
 export function FileUpload({
@@ -21,7 +22,8 @@ export function FileUpload({
   className,
   accept = "image/*",
   maxSize = 5,
-  placeholder = "Pilih gambar..."
+  placeholder = "Pilih gambar...",
+  category
 }: FileUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(value || null);
@@ -56,6 +58,9 @@ export function FileUpload({
     try {
       const formData = new FormData();
       formData.append('file', file);
+      if (category) {
+        formData.append('category', category);
+      }
 
       const token = localStorage.getItem('auth-token');
       const response = await fetch('/api/upload', {

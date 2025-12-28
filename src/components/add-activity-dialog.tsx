@@ -233,6 +233,7 @@ export function AddActivityDialog({ children }: AddActivityDialogProps) {
               onChange={(url) => handleChange('image', url)}
               placeholder="Pilih gambar untuk kegiatan"
               maxSize={5}
+              category="kegiatan"
             />
           </div>
 

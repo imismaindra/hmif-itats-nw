@@ -33,11 +33,9 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    position: '',
-    department: '',
+    position_id: '',
     email: '',
     phone: '',
-    level: 3,
     image: '',
   });
   const [error, setError] = useState('');
@@ -50,16 +48,20 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
     setError('');
 
     try {
-      await createMember.mutateAsync(formData);
+      // Convert position_id to number
+      const submitData = {
+        ...formData,
+        position_id: formData.position_id ? parseInt(formData.position_id) : undefined,
+      };
+
+      await createMember.mutateAsync(submitData);
 
       setOpen(false);
       setFormData({
         name: '',
-        position: '',
-        department: '',
+        position_id: '',
         email: '',
         phone: '',
-        level: 3,
         image: '',
       });
     } catch (error) {
@@ -107,45 +109,18 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="position">Jabatan *</Label>
-              <Input
-                id="position"
-                value={formData.position}
-                onChange={(e) => handleChange('position', e.target.value)}
-                placeholder="Contoh: Ketua, Sekretaris, dll"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="department">Departemen/Divisi</Label>
-              <Select value={formData.department} onValueChange={(value) => handleChange('department', value)}>
+              <Label htmlFor="position_id">Posisi *</Label>
+              <Select value={formData.position_id} onValueChange={(value) => handleChange('position_id', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Pilih divisi" />
+                  <SelectValue placeholder="Pilih posisi" />
                 </SelectTrigger>
                 <SelectContent>
-                  {divisions?.map((division: any) => (
-                    <SelectItem key={division.id} value={division.name}>
-                      {division.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="level">Level</Label>
-              <Select value={formData.level.toString()} onValueChange={(value) => handleChange('level', parseInt(value))}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">Pengurus Inti</SelectItem>
-                  <SelectItem value="2">Koordinator</SelectItem>
-                  <SelectItem value="3">Staff</SelectItem>
-                  <SelectItem value="4">Anggota Biasa</SelectItem>
+                  <SelectItem value="1">Ketua Umum</SelectItem>
+                  <SelectItem value="2">Wakil Ketua Umum</SelectItem>
+                  <SelectItem value="3">Sekretaris Umum</SelectItem>
+                  <SelectItem value="4">Bendahara Umum</SelectItem>
+                  <SelectItem value="5">Koordinator Divisi</SelectItem>
+                  <SelectItem value="6">Anggota Divisi</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -181,6 +156,7 @@ export function AddMemberDialog({ children }: AddMemberDialogProps) {
               onChange={(url) => handleChange('image', url)}
               placeholder="Pilih foto profil anggota"
               maxSize={5}
+              category="anggota"
             />
           </div>
 

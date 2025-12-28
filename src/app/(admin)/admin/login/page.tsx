@@ -40,10 +40,10 @@ export default function LoginPage() {
         if (data.token) {
           localStorage.setItem('auth-token', data.token);
         }
-        router.push('/dashboard');
+        router.push('/admin/dashboard');
         router.refresh();
       } else {
-        setError(data.error || 'Login failed');
+        setError(data.error || 'Login gagal. Silakan coba lagi.');
       }
     } catch (error) {
       setError('Network error. Please try again.');

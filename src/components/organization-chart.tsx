@@ -70,11 +70,11 @@ export default function OrganizationChart() {
   const allMembers: OrgMember[] = members?.map((member: any) => ({
     id: member.id.toString(),
     name: member.name,
-    position: member.position,
-    department: memberDivisionMap[member.id] || member.department, // Use division name if assigned, otherwise use member's department
+    position: member.position?.name || 'No position',
+    department: memberDivisionMap[member.id], // Use division name if assigned
     image: member.image,
     email: member.email,
-    level: member.level,
+    level: member.position?.level || 3, // Default to level 3 if no position
   })) || [];
 
   // Group members by level

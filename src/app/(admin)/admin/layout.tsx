@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { LayoutDashboard, FileText, Activity, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, FileText, Activity, Users, LogOut, Network } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({
@@ -48,6 +48,13 @@ export default function AdminLayout({
               >
                 <Users className="w-4 h-4" />
                 Anggota
+              </Link>
+              <Link
+                href="/admin/struktur-organisasi"
+                className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                <Network className="w-4 h-4" />
+                Struktur Organisasi
               </Link>
             </div>
           </div>
